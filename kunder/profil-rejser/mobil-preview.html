@@ -135,7 +135,7 @@
 </head>
 <body>
 
-  <h1>Profil Rejser — Mobil demoer</h1>
+  <a href="index.html" style="text-decoration:none"><h1>Profil Rejser — Mobil demoer</h1></a>
   <p class="subtitle">Vælg en demo for at se den i mobilramme</p>
 
   <div class="tabs">
@@ -158,6 +158,19 @@
     const tabs = document.querySelectorAll('.tab');
     const frame = document.getElementById('demoFrame');
     const label = document.getElementById('demoLabel');
+
+    // Check URL parameter for initial page
+    const params = new URLSearchParams(window.location.search);
+    const startPage = params.get('side');
+    if (startPage) {
+      const matchingTab = Array.from(tabs).find(t => t.dataset.src.includes(startPage));
+      if (matchingTab) {
+        tabs.forEach(t => t.classList.remove('active'));
+        matchingTab.classList.add('active');
+        frame.src = matchingTab.dataset.src;
+        label.innerHTML = `<strong>${matchingTab.textContent}</strong>`;
+      }
+    }
 
     tabs.forEach(tab => {
       tab.addEventListener('click', () => {
