@@ -137,8 +137,8 @@
        ======================================== */
     .hero {
       position: relative;
-      height: 75vh;
-      min-height: 480px;
+      height: 45vh;
+      min-height: 300px;
       overflow: hidden;
       display: flex;
       align-items: flex-end;
@@ -459,8 +459,25 @@
       background: var(--light-bg);
       border-radius: 12px;
       display: flex;
+      flex-direction: row;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .expert-cta-content {
+      flex: 1;
+      display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
+    }
+
+    .expert-cta-photo {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+      align-self: center;
     }
 
     .expert-cta-title {
@@ -680,7 +697,7 @@
   <header class="header" id="header">
     <div class="header-logo">Profil Rejser</div>
     <div class="header-actions">
-      <button class="header-cta">Få et tilbud</button>
+      <button class="header-cta">Søg</button>
       <div class="header-menu"><span></span><span></span><span></span></div>
     </div>
   </header>
@@ -829,17 +846,20 @@
     function expertCTAHTML() {
       return `
         <div class="expert-cta fade-in fade-in-d5">
-          <div class="expert-cta-title font-heading">Tal med vores Asien-ekspert</div>
-          <div class="expert-cta-desc">Alice kender Asiens kulinariske scene indgående og kan skræddersy den perfekte rejse til dig.</div>
-          <div class="expert-cta-actions">
-            <button class="expert-btn expert-btn-primary">Ring til Alice</button>
+          <div class="expert-cta-content">
+            <div class="expert-cta-title font-heading">Tal med vores Asien-ekspert</div>
+            <div class="expert-cta-desc">Alice kender Asiens kulinariske scene indgående og kan skræddersy den perfekte rejse til dig.</div>
+            <div class="expert-cta-actions">
+              <button class="expert-btn expert-btn-primary">Ring til Alice</button>
             <button class="expert-btn-icon" title="Send en besked">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
                 <polyline points="22,6 12,13 2,6"></polyline>
               </svg>
             </button>
+            </div>
           </div>
+          <img class="expert-cta-photo" src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&h=200&fit=crop&crop=face" alt="Alice">
         </div>
       `;
     }

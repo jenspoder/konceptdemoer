@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Profil Rejser — Kultur, boutique-hoteller og strand (CTA-demo)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+    body {
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: #000; background: #fff; max-width: 430px; margin: 0 auto;
+      overflow-x: hidden; position: relative; padding-bottom: 80px;
+    }
+    .font-heading { font-family: 'Playfair Display', Georgia, serif; font-weight: 300; }
+    :root {
+      --navy: #1A2C41; --white: #FFFFFF; --light-bg: #F3F1ED;
+      --black: #000; --gray-dark: #545454; --gray-mid: #313131; --gold: #9F8974;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* HEADER */
+    .header {
+      position: fixed; top: 0; left: 50%; transform: translateX(-50%);
+      width: 100%; max-width: 430px; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 20px; background: transparent; transition: background 0.3s;
+    }
+    .header.scrolled { background: var(--white); box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+    .header-logo { font-weight: 700; font-size: 14px; color: var(--white); text-transform: uppercase; letter-spacing: 0.5px; transition: color 0.3s; }
+    .header.scrolled .header-logo { color: var(--navy); }
+    .header-actions { display: flex; gap: 16px; align-items: center; }
+    .header-cta { font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500; color: var(--white); background: transparent; border: 1px solid rgba(255,255,255,0.5); border-radius: 9999px; padding: 6px 14px; cursor: pointer; transition: all 0.3s; }
+    .header.scrolled .header-cta { color: var(--navy); border-color: var(--navy); }
+    .header-menu { display: flex; flex-direction: column; gap: 4px; cursor: pointer; }
+    .header-menu span { display: block; width: 20px; height: 2px; background: var(--white); border-radius: 1px; transition: background 0.3s; }
+    .header.scrolled .header-menu span { background: var(--navy); }
+
+    /* HERO */
+    .hero {
+      position: relative; height: 50vh; min-height: 320px; overflow: hidden;
+      display: flex; align-items: flex-end; padding: 0 24px 40px;
+    }
+    .hero-image {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(26,44,65,0.15) 0%, rgba(26,44,65,0.55) 100%),
+        url('https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=860&h=600&fit=crop') center/cover no-repeat;
+    }
+    .hero-content { position: relative; z-index: 1; }
+    .hero-content h1 { font-size: 32px; line-height: 1.15; color: var(--white); margin-bottom: 8px; }
+    .hero-content p { font-size: 15px; color: rgba(255,255,255,0.85); line-height: 1.5; }
+
+    /* TRAVEL INFO BAR */
+    .travel-info {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 16px 24px; background: var(--light-bg);
+    }
+    .travel-info-item { font-size: 14px; color: var(--gray-mid); }
+    .travel-info-price { font-size: 18px; font-weight: 700; color: var(--navy); }
+
+    /* SECTION */
+    .section { padding: 24px 24px; }
+    .section p { font-size: 15px; line-height: 1.7; color: var(--gray-mid); }
+    .section h2 { font-size: 22px; color: var(--navy); margin-bottom: 16px; line-height: 1.3; }
+
+    /* HIGHLIGHTS */
+    .highlights { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+    .highlight {
+      padding: 16px; background: var(--light-bg); border-radius: 10px; text-align: center;
+    }
+    .highlight-icon { font-size: 24px; margin-bottom: 6px; }
+    .highlight-text { font-size: 13px; font-weight: 500; color: var(--navy); line-height: 1.3; }
+
+    /* ACCORDION */
+    .accordion { margin-top: 8px; }
+    .accordion-item { border-bottom: 1px solid rgba(0,0,0,0.06); }
+    .accordion-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 16px 0; cursor: pointer; font-size: 15px; font-weight: 500; color: var(--navy);
+      gap: 12px;
+    }
+    .accordion-header-text { flex: 1; }
+    .accordion-arrow { transition: transform 0.2s; font-size: 18px; color: var(--gray-dark); flex-shrink: 0; }
+    .accordion-item.open .accordion-arrow { transform: rotate(180deg); }
+    .accordion-body {
+      max-height: 0; overflow: hidden; transition: max-height 0.4s ease;
+      font-size: 14px; line-height: 1.7; color: var(--gray-dark);
+    }
+    .accordion-item.open .accordion-body { max-height: 600px; }
+    .accordion-body-inner { padding: 0 0 16px; }
+
+    /* HOTEL CARDS */
+    .hotel-cards { display: flex; flex-direction: column; gap: 20px; }
+    .hotel-card { border-radius: 12px; overflow: hidden; background: var(--white); box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+    .hotel-card-img { width: 100%; height: 200px; object-fit: cover; display: block; }
+    .hotel-card-body { padding: 20px; }
+    .hotel-card-body h3 { font-size: 18px; color: var(--navy); margin-bottom: 8px; line-height: 1.3; }
+    .hotel-card-body p { font-size: 14px; line-height: 1.6; color: var(--gray-dark); }
+
+    /* PRICE SECTION */
+    .price-section {
+      margin: 24px; padding: 28px 24px; background: var(--light-bg); border-radius: 16px; text-align: center;
+    }
+    .price-label { font-size: 14px; color: var(--gray-dark); margin-bottom: 4px; }
+    .price-amount { font-size: 28px; font-weight: 700; color: var(--navy); }
+    .price-note { font-size: 13px; color: var(--gray-dark); margin-top: 4px; margin-bottom: 20px; }
+    .price-table { width: 100%; text-align: left; border-collapse: collapse; margin-top: 8px; }
+    .price-table td { padding: 10px 0; font-size: 14px; color: var(--gray-mid); border-bottom: 1px solid rgba(0,0,0,0.06); }
+    .price-table td:last-child { text-align: right; font-weight: 700; color: var(--navy); }
+    .price-table tr:last-child td { border-bottom: none; }
+
+    /* INCLUDED & ADD-ONS */
+    .included-list { list-style: none; padding: 0; }
+    .included-list li {
+      position: relative; padding: 10px 0 10px 24px; font-size: 14px; line-height: 1.6;
+      color: var(--gray-mid); border-bottom: 1px solid rgba(0,0,0,0.04);
+    }
+    .included-list li::before {
+      content: ''; position: absolute; left: 0; top: 16px;
+      width: 8px; height: 8px; border-radius: 50%; background: var(--navy);
+    }
+    .included-list li:last-child { border-bottom: none; }
+    .addon-list { list-style: none; padding: 0; }
+    .addon-list li {
+      position: relative; padding: 10px 0 10px 24px; font-size: 14px; line-height: 1.6;
+      color: var(--gray-mid); border-bottom: 1px solid rgba(0,0,0,0.04);
+    }
+    .addon-list li::before {
+      content: '+'; position: absolute; left: 2px; top: 10px;
+      font-size: 14px; font-weight: 700; color: var(--gold);
+    }
+    .addon-list li:last-child { border-bottom: none; }
+
+    /* EXPERT SECTION */
+    .expert-section { padding: 32px 24px; background: var(--light-bg); text-align: center; }
+    .expert-avatar { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-bottom: 12px; }
+    .expert-name { font-size: 18px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+    .expert-title { font-size: 14px; color: var(--gray-dark); margin-bottom: 20px; line-height: 1.5; }
+    .expert-buttons { display: flex; gap: 12px; justify-content: center; }
+    .btn-primary { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 700; color: var(--white); background: var(--navy); border: none; border-radius: 9999px; padding: 12px 24px; cursor: pointer; display: inline-block; }
+    .btn-outline { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; color: var(--navy); background: transparent; border: 1.5px solid var(--navy); border-radius: 9999px; padding: 11px 22px; cursor: pointer; display: inline-block; }
+
+    /* OLD INQUIRY FORM */
+    .old-form-section { padding: 32px 24px; background: var(--white); }
+    .old-form-section h2 { font-size: 22px; color: var(--navy); margin-bottom: 6px; }
+    .old-form-section .old-form-subtitle { font-size: 14px; color: var(--gray-dark); margin-bottom: 20px; line-height: 1.5; }
+    .old-form-badge {
+      display: inline-block; font-size: 11px; font-weight: 700; color: var(--white);
+      background: #B0452A; border-radius: 4px; padding: 3px 8px; margin-bottom: 16px;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+
+    /* NEWSLETTER */
+    .newsletter { padding: 40px 24px; text-align: center; }
+    .newsletter h3 { font-size: 20px; color: var(--navy); margin-bottom: 8px; }
+    .newsletter p { font-size: 14px; color: var(--gray-dark); margin-bottom: 16px; line-height: 1.5; }
+    .newsletter-input {
+      width: 100%; font-family: 'DM Sans', sans-serif; font-size: 15px;
+      padding: 12px 16px; border: 1px solid rgba(26,44,65,0.15); border-radius: 10px;
+      background: var(--light-bg); margin-bottom: 12px; outline: none; -webkit-appearance: none;
+    }
+    .newsletter-btn {
+      width: 100%; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700;
+      color: var(--white); background: var(--navy); border: none; border-radius: 9999px;
+      padding: 14px; cursor: pointer;
+    }
+
+    /* GALLERY */
+    .gallery { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; padding: 0; }
+    .gallery img { width: 100%; height: 140px; object-fit: cover; }
+
+    /* FOOTER */
+    .site-footer {
+      background: var(--navy); color: rgba(255,255,255,0.7);
+      padding: 40px 24px; font-size: 13px; line-height: 1.8;
+    }
+    .site-footer strong { color: var(--white); font-weight: 500; display: block; margin-bottom: 8px; margin-top: 20px; }
+    .site-footer strong:first-child { margin-top: 0; }
+    .footer-bottom { margin-top: 32px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 12px; color: rgba(255,255,255,0.4); }
+
+    /* STICKY BAR */
+    .sticky-bar {
+      position: fixed; bottom: 0; left: 50%; transform: translateX(-50%) translateY(100%);
+      width: 100%; max-width: 430px; z-index: 150;
+      background: var(--gold); box-shadow: 0 -2px 12px rgba(0,0,0,0.15);
+      padding: 12px 20px; padding-bottom: max(12px, env(safe-area-inset-bottom));
+      display: flex; align-items: center; gap: 14px; cursor: pointer;
+      transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .sticky-bar.visible { transform: translateX(-50%) translateY(0); }
+    .sticky-bar-avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+    .sticky-bar-text { flex: 1; font-size: 15px; font-weight: 700; color: var(--white); line-height: 1.3; }
+    .sticky-bar-arrow { flex-shrink: 0; color: var(--white); }
+    .sticky-bar-arrow svg { width: 20px; height: 20px; }
+
+    /* OVERLAY & PANEL */
+    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s; }
+    .overlay.active { opacity: 1; visibility: visible; }
+    .panel {
+      position: fixed; bottom: 0; left: 50%; transform: translateX(-50%) translateY(100%);
+      width: 100%; max-width: 430px; height: 82vh; z-index: 300;
+      background: var(--white); border-radius: 16px 16px 0 0;
+      box-shadow: 0 -4px 24px rgba(0,0,0,0.15);
+      transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+      display: flex; flex-direction: column;
+    }
+    .panel.active { transform: translateX(-50%) translateY(0); }
+    .panel-handle { display: flex; justify-content: center; padding: 12px 0 4px; flex-shrink: 0; }
+    .panel-handle::after { content: ''; width: 36px; height: 4px; background: #D0D0D0; border-radius: 2px; }
+    .panel-header { display: flex; align-items: center; justify-content: flex-end; padding: 4px 20px 8px; flex-shrink: 0; }
+    .panel-close {
+      width: 32px; height: 32px; border-radius: 50%; border: none;
+      background: var(--light-bg); color: var(--gray-mid); font-size: 18px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    .panel-body { flex: 1; overflow-y: auto; padding: 0 24px 40px; -webkit-overflow-scrolling: touch; }
+
+    /* Panel expert */
+    .panel-expert { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+    .panel-expert-avatar { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+    .panel-expert-info { flex: 1; }
+    .panel-expert-name { font-size: 17px; font-weight: 700; color: var(--navy); }
+    .panel-expert-title { font-size: 13px; color: var(--gray-dark); margin-top: 2px; }
+    .panel-phone {
+      display: flex; align-items: center; gap: 12px; width: 100%;
+      padding: 14px 18px; background: var(--light-bg); border-radius: 12px; margin-bottom: 8px;
+    }
+    .panel-phone-icon {
+      width: 40px; height: 40px; border-radius: 50%; background: var(--navy);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .panel-phone-icon svg { width: 18px; height: 18px; color: var(--white); }
+    .panel-phone-number { font-size: 18px; font-weight: 700; color: var(--navy); }
+    .panel-phone-label { font-size: 12px; color: var(--gray-dark); margin-top: 1px; }
+    .panel-divider {
+      display: flex; align-items: center; gap: 12px; margin: 20px 0; color: var(--gray-dark); font-size: 13px;
+    }
+    .panel-divider::before, .panel-divider::after { content: ''; flex: 1; height: 1px; background: rgba(0,0,0,0.08); }
+
+    /* Context label */
+    .context-label {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 14px 16px; background: var(--light-bg); border-radius: 10px; margin-bottom: 20px;
+    }
+    .context-label-text { font-size: 13px; color: var(--gray-dark); }
+    .context-label-value { font-size: 14px; font-weight: 700; color: var(--navy); margin-top: 2px; }
+    .context-label-change { font-size: 13px; color: var(--gold); cursor: pointer; flex-shrink: 0; }
+
+    /* Form */
+    .form-group { margin-bottom: 16px; }
+    .form-label { display: block; font-size: 13px; font-weight: 500; color: var(--gray-mid); margin-bottom: 6px; }
+    .form-input, .form-textarea {
+      width: 100%; font-family: 'DM Sans', sans-serif; font-size: 15px;
+      padding: 12px 16px; border: 1px solid rgba(26,44,65,0.15); border-radius: 10px;
+      background: var(--light-bg); color: var(--black); outline: none; -webkit-appearance: none;
+    }
+    .form-input:focus, .form-textarea:focus { border-color: var(--navy); background: var(--white); }
+    .form-textarea { resize: none; height: 80px; }
+    .form-submit {
+      width: 100%; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 700;
+      color: var(--white); background: var(--navy); border: none; border-radius: 9999px;
+      padding: 14px; cursor: pointer; margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. FIXED HEADER -->
+  <header class="header" id="header">
+    <div class="header-logo">Profil Rejser</div>
+    <div class="header-actions">
+      <button class="header-cta">Søg</button>
+      <div class="header-menu"><span></span><span></span><span></span></div>
+    </div>
+  </header>
+
+  <!-- 2. HERO -->
+  <section class="hero">
+    <div class="hero-image"></div>
+    <div class="hero-content">
+      <h1 class="font-heading">Kultur, boutique-hoteller og strand</h1>
+      <p>15 dage / 12 nætter i Thailand</p>
+    </div>
+  </section>
+
+  <!-- 3. INFO BAR -->
+  <div class="travel-info">
+    <div class="travel-info-item">15 dage / 12 nætter</div>
+    <div class="travel-info-price">Fra 22.720 kr.</div>
+  </div>
+
+  <!-- 4. INTRO TEXT -->
+  <section class="section">
+    <p>En berigende rejse med små boutique-hoteller, kunsthåndværk og autentisk kultur — efterfulgt af syv natters strandferie ved det turkise Andamanhav.</p>
+  </section>
+
+  <!-- 5. HIGHLIGHTS -->
+  <section class="section" style="padding-top: 0;">
+    <div class="highlights">
+      <div class="highlight"><div class="highlight-icon">🏨</div><div class="highlight-text">Boutique-hoteller</div></div>
+      <div class="highlight"><div class="highlight-icon">🚂</div><div class="highlight-text">Tog og templer</div></div>
+      <div class="highlight"><div class="highlight-icon">🎨</div><div class="highlight-text">Kunsthåndværk</div></div>
+      <div class="highlight"><div class="highlight-icon">🏖️</div><div class="highlight-text">7 nætters strand</div></div>
+    </div>
+    <div style="margin-top:24px;display:flex;flex-direction:column;gap:10px">
+      <button class="btn-primary" style="width:100%;padding:14px;font-size:15px" id="inlineCTA">Få et tilbud på denne rejse</button>
+      <div style="display:flex;align-items:center;gap:10px;justify-content:center">
+        <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100&h=100&fit=crop&crop=face" alt="Alice" style="width:32px;height:32px;border-radius:50%;object-fit:cover">
+        <span style="font-size:13px;color:var(--gray-dark)">Eller ring til Alice: <strong style="color:var(--navy)">77 33 55 00</strong></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. FULL TRAVEL PROGRAM (ACCORDION) -->
+  <section class="section">
+    <h2 class="font-heading">Rejseprogram</h2>
+    <div class="accordion">
+
+      <div class="accordion-item">
+        <div class="accordion-header">
+          <span class="accordion-header-text">Dag 1 · Afrejse fra København</span>
+          <span class="accordion-arrow">▾</span>
+        </div>
+        <div class="accordion-body"><div class="accordion-body-inner">Afrejse fra København Kastrup med mellemlanding undervejs. Aftenen tilbringes i luften med kurs mod Nordthailand. Læn dig tilbage, nyd filmen og glæd dig til de oplevelser der venter — fra gamle templer og håndværkstraditioner til palmestrande og turkist vand.</div></div>
+      </div>
+
+      <div class="accordion-item">
+        <div class="accordion-header">
+          <span class="accordion-header-text">Dag 2 · Ankomst Chiang Mai</span>
+          <span class="accordion-arrow">▾</span>
+        </div>
+        <div class="accordion-body"><div class="accordion-body-inner">Ankomst til Chiang Mai International Airport. Du bliver hentet af din private chauffør og kørt til <strong>Na Nirand Romantic Boutique Resort</strong> ved Ping-floden. Check ind, frisk op og tag en første spadseretur langs flodbredden. Om aftenen kan du udforske Night Bazaar — et farverigt marked med street food, silketøj og lokalt kunsthåndværk. Overnatning på Na Nirand.</div></div>
+      </div>
+
+      <div class="accordion-item">
+        <div class="accordion-header">
+          <span class="accordion-header-text">Dag 3 · Chiang Mai — gamle by og templer</span>
+          <span class="accordion-arrow">▾</span>
+        </div>
+        <div class="accordion-body"><div class="accordion-body-inner">Morgenmad på hotellet. I dag udforsker du den gamle by inden for voldgravene. Besøg det imponerende <strong>Wat Phra Singh</strong> med sine gyldne chedier og vægmalerier fra det 14. århundrede. Derefter videre til Wat Chedi Luang og de stille klostre i sidegaterne. Frokost på et lokalt spisested med khao soi — Chiang Mais berømte currysuppe. Eftermiddagen er fri til at vandre gennem de kreative kvarterer eller besøge en af byens mange kafferistorier. Overnatning på Na Nirand.</div></div>
+      </div>
+
+      <div class="accordion-item">
+        <div class="accordion-header">
+          <span class="accordion-header-text">Dag 4 · Doi Suthep og kunsthåndværk</span>
+          <span class="accordion-arrow">▾</span>
+        </div>
+        <div class="accordion-body"><div class="accordion-body-inner">Om morgenen kører du op ad det snoede bjergvej til <strong>Wat Phra That Doi Suthep</strong>, det hellige tempel der troner over byen i 1.076 meters højde. Nyd den storslåede udsigt over Chiang Mai-dalen. Derefter besøg i håndværkerlandsbyen Baan Tawai, hvor du oplever træskærere, lakarbejdere og sølvsmede i arbejde. Eftermiddag fri til pool og spa på hotellet. Sidste overnatning på Na Nirand.</div></div>
+      </div>
+
+      <div class="accordion-item open">
+        <div class="accordion-header">
+          <span class="accordion-header-text">Dag 5 · Tog til Si Satchanalai</span>
+          <span class="accordion-arrow">▾</span>
+        </div>
+        <div class="accordion-body"><div class="accordion-body-inner">I dag begynder et af rejsens store højdepunkter: den fem timer lange <strong>togrejse gennem det nordlige Thailands landskaber</strong>. Fra Chiang Mai Station ruller toget sydpå gennem rismarker, bambuskove og små landsbyer, mens bjergene langsomt viger for slettelandskabet. Ankomst til Si Satchanalai om eftermiddagen, hvor du bliver hentet og kørt til <strong>Baan Chomprang</strong> — et intimt boutique-hotel ved Yom-floden, designet af den legendariske arkitekt Bill Bensley. Aftensmad på hotellets restaurant med lokale råvarer. Overnatning på Baan Chomprang med halvpension.</div></div>
+      </div>
+
+      <div class="accordion-item">
+        <div class="accordion-header">
+          <span class="accordion-header-text">Dag 6 · Si Satchanalai — kunsthåndværkere</span>
+          <span class="accordion-arrow">▾</span>
+        </div>
+        <div class="accordion-body"><div class="accordion-body-inner">Guidet besøg hos lokale <strong>tekstilkunstnere</strong>, der væver det berømte Teen Jok-stof med mønstre der går generationer tilbage. Derefter videre til en <strong>guldsmedeværksted</strong>, hvor du ser demonstrationer af traditionelle teknikker fra Sukhothai-perioden. Eftermiddag besøg i den historiske park <strong>Wat Phra Si Ratana Mahathat</strong> — et af Thailands mest imponerende tempelkomplekser fra det 13. århundrede, med sine lotusknop-formede chedier og stående Buddha-figurer. Aftenmad på Baan Chomprang. Overnatning med halvpension.</div></div>
+      </div>
+
+      <div class="accordion-item">
+        <div class="accordion-header">
+          <span class="accordion-header-text">Dag 7 · Si Satchanalai — markeder og templer</span>
+          <span class="accordion-arrow">▾</span>
+        </div>
+        <div class="accordion-body"><div class="accordion-body-inner">Morgenmad og besøg på det lokale morgenmarked, hvor bønder og fiskere sælger dagens fangst og friske råvarer. Oplev den autentiske stemning i en by, der endnu ikke er opdaget af masseturismen. Resten af formiddagen til udforskning af de omkringliggende templer og keramikværksteder — Si Satchanalai var i middelalderen centrum for den berømte Sawankhalok-keramik. Fri eftermiddag ved poolen eller en gåtur langs Yom-floden. Sidste overnatning på Baan Chomprang.</div></div>
+      </div>
+
+      <div class="accordion-item">
+        <div class="accordion-header">
+          <span class="accordion-header-text">Dag 8 · Fly til Phuket</span>
+          <span class="accordion-arrow">▾</span>
+        </div>
+        <div class="accordion-body"><div class="accordion-body-inner">Transfer til lufthavnen og indenrigsfly til Phuket. Ankomst og transfer nordpå til <strong>SALA Phuket Mai Khao Beach Resort</strong> i Sirinat National Park — en af Phukets længste og mest uberørte strande. Check ind i dit rummelige værelse med pool-adgang. Resten af dagen er fri til at nyde stranden, poolen eller en velkomstdrink i Beach Bar. Overnatning på SALA Phuket.</div></div>
+      </div>
+
+      <div class="accordion-item">
+        <div class="accordion-header">
+          <span class="accordion-header-text">Dag 9-11 · Stranddage i Mai Khao</span>
+          <span class="accordion-arrow">▾</span>
+        </div>
+        <div class="accordion-body"><div class="accordion-body-inner">Tre frie dage ved det turkise Andamanhav. Nyd morgenerne med yoga på stranden (inkluderet), lange svømmeture i det varme vand og cocktails ved poolen. For de aktive er der mulighed for SUP, kajak og snorkling direkte fra stranden. Forkæl dig selv med en behandling i resortets spa — prøv den traditionelle thailandske massage eller en aromaterapi-session. Om aftenen kan du spise på SALA Restaurant med udsigt over havet eller prøve de lokale restauranter i den nærliggende landsby. Overnatning på SALA Phuket.</div></div>
+      </div>
+
+      <div class="accordion-item">
+        <div class="accordion-header">
+          <span class="accordion-header-text">Dag 12-13 · Similan-øerne og afslapning</span>
+          <span class="accordion-arrow">▾</span>
+        </div>
+        <div class="accordion-body"><div class="accordion-body-inner">Mulighed for en <strong>dag-udflugt til Similan-øerne</strong> (tilkøb) — ni små øer med krystalklart vand, hvide sandstrande og noget af verdens bedste snorkling. Svøm med farverige tropefisk og beundre de enorme granitklippeformationer. Resten af tiden er din egen — læs en bog i hængekøjen, tag en lang strandvandring eller nyd solnedgangen fra Beach Bar med en frisk kokosnød. Sidste overnatning på SALA Phuket.</div></div>
+      </div>
+
+      <div class="accordion-item">
+        <div class="accordion-header">
+          <span class="accordion-header-text">Dag 14 · Hjemrejse fra Phuket</span>
+          <span class="accordion-arrow">▾</span>
+        </div>
+        <div class="accordion-body"><div class="accordion-body-inner">Morgenmad og fri formiddag til de sidste stunder ved stranden eller poolen. Sen check-out (efter tilgængelighed). Transfer til Phuket International Airport og afgang mod København med mellemlanding undervejs. Tag minderne med hjem — fra templernes stilhed i Chiang Mai, togrejsen gennem rismarkerne, kunsthåndværkernes fingerfærdighed i Si Satchanalai og det turkise havs ro i Mai Khao.</div></div>
+      </div>
+
+      <div class="accordion-item">
+        <div class="accordion-header">
+          <span class="accordion-header-text">Dag 15 · Ankomst København</span>
+          <span class="accordion-arrow">▾</span>
+        </div>
+        <div class="accordion-body"><div class="accordion-body-inner">Ankomst i Københavns Lufthavn i løbet af formiddagen. Velkommen hjem med en rygsæk fuld af oplevelser og minder fra et Thailand, de fleste aldrig ser.</div></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 7. HOTELS SECTION -->
+  <section class="section">
+    <h2 class="font-heading">Hotellerne på din rejse</h2>
+    <div class="hotel-cards">
+
+      <div class="hotel-card">
+        <img class="hotel-card-img" src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&h=500&fit=crop" alt="Na Nirand Romantic Boutique Resort">
+        <div class="hotel-card-body">
+          <h3 class="font-heading">Na Nirand Romantic Boutique Resort</h3>
+          <p>Ping-floden, Chiang Mai. Seks pavilloner i kolonial og traditionel Lanna-arkitektur. 100+ år gammelt regntræ, pool ved floden, spa, restaurant TIME Riverfront Cuisine & Bar. Værelser 31-73 m².</p>
+        </div>
+      </div>
+
+      <div class="hotel-card">
+        <img class="hotel-card-img" src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=500&fit=crop" alt="Baan Chomprang">
+        <div class="hotel-card-body">
+          <h3 class="font-heading">Baan Chomprang</h3>
+          <p>Designet af arkitekt Bill Bensley. Intim boutique ved Yom-floden med udsigt til Wat Phra Si Ratana Mahathat. Lokale kunstværker, private terrasser, restaurant med lokale råvarer, pool og spa.</p>
+        </div>
+      </div>
+
+      <div class="hotel-card">
+        <img class="hotel-card-img" src="https://images.unsplash.com/photo-1540541338287-41700207dee6?w=800&h=500&fit=crop" alt="SALA Phuket Mai Khao Beach Resort">
+        <div class="hotel-card-body">
+          <h3 class="font-heading">SALA Phuket Mai Khao Beach Resort</h3>
+          <p>70 værelser i Sirinat National Park. Pool villas og suiter med private pools. Voksen- og familiepools, strandbar, spa, yoga på stranden. SALA Restaurant og Beach Bar.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 8. PRICE SECTION -->
+  <div class="price-section">
+    <div class="price-label">Pris pr. person</div>
+    <div class="price-amount">Fra 22.720 kr.</div>
+    <div class="price-note">Inkl. fly, hotel og transfers</div>
+    <table class="price-table">
+      <tr><td>April</td><td>23.920 kr.</td></tr>
+      <tr><td>Maj</td><td>23.320 kr.</td></tr>
+      <tr><td>Juni</td><td>22.720 kr.</td></tr>
+      <tr><td>Juli 1-16</td><td>25.320 kr.</td></tr>
+      <tr><td>Juli 17-31</td><td>25.920 kr.</td></tr>
+      <tr><td>August</td><td>23.320 kr.</td></tr>
+      <tr><td>September</td><td>22.720 kr.</td></tr>
+      <tr><td>Oktober</td><td>23.320 kr.</td></tr>
+    </table>
+  </div>
+
+  <!-- 9. INCLUDED SECTION -->
+  <section class="section">
+    <h2 class="font-heading">Inkluderet i rejsen</h2>
+    <ul class="included-list">
+      <li>Internationale fly og indenrigsfly</li>
+      <li>Lufthavnstransfers og transport</li>
+      <li>Overnatning på de nævnte hoteller</li>
+      <li>Morgenmad i Chiang Mai og Phuket</li>
+      <li>Halvpension i Si Satchanalai</li>
+      <li>Togrejse 2. klasse med AC</li>
+      <li>Guidede besøg hos kunsthåndværkere</li>
+      <li>Entrébilletter</li>
+    </ul>
+  </section>
+
+  <!-- 10. ADD-ONS SECTION -->
+  <section class="section" style="padding-top: 0;">
+    <h2 class="font-heading">Tilkøb</h2>
+    <ul class="addon-list">
+      <li>Rejseforsikring</li>
+      <li>Afbestillingsforsikring</li>
+      <li>Indenrigs flyforbindelser</li>
+    </ul>
+  </section>
+
+  <!-- 11. EXPERT SECTION -->
+  <div class="expert-section">
+    <img class="expert-avatar" src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=300&h=300&fit=crop&crop=face" alt="Alice">
+    <div class="expert-name">Alice Hamurkesen</div>
+    <div class="expert-title">Rejseekspert for Asien og Det Indiske Ocean</div>
+    <div class="expert-buttons">
+      <button class="btn-primary">Ring til Alice</button>
+      <button class="btn-outline">Skriv til Alice</button>
+    </div>
+  </div>
+
+  <!-- 12. OLD INQUIRY FORM (for contrast) -->
+  <div class="old-form-section">
+    <div class="old-form-badge">Eksisterende formular</div>
+    <h2 class="font-heading">Send en forespørgsel</h2>
+    <p class="old-form-subtitle">Udfyld formularen herunder, og vi vender tilbage med et uforpligtende tilbud.</p>
+
+    <div class="form-group">
+      <label class="form-label">Navn</label>
+      <input class="form-input" type="text" placeholder="Fornavn og efternavn">
+    </div>
+    <div class="form-group">
+      <label class="form-label">E-mail</label>
+      <input class="form-input" type="email" placeholder="din@email.dk">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Telefon</label>
+      <input class="form-input" type="tel" placeholder="+45 00 00 00 00">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Rejsedato</label>
+      <input class="form-input" type="text" placeholder="Hvornår vil du rejse?">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Antal personer</label>
+      <input class="form-input" type="text" placeholder="Fx 2 voksne, 1 barn">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Bemærkninger</label>
+      <textarea class="form-textarea" placeholder="Har du særlige ønsker eller spørgsmål?"></textarea>
+    </div>
+    <button class="form-submit">Send forespørgsel</button>
+  </div>
+
+  <!-- 13. NEWSLETTER -->
+  <div class="newsletter">
+    <h3 class="font-heading">Få inspiration i din indbakke</h3>
+    <p>Tilmeld dig vores nyhedsbrev og deltag i konkurrencen om et gavekort på 5.000 kr.</p>
+    <input class="newsletter-input" type="email" placeholder="Din e-mailadresse">
+    <button class="newsletter-btn">Tilmeld</button>
+  </div>
+
+  <!-- 14. GALLERY -->
+  <div class="gallery">
+    <img src="https://images.unsplash.com/photo-1528181304800-259b08848526?w=400&h=300&fit=crop" alt="Thailand tempel">
+    <img src="https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=400&h=300&fit=crop" alt="Thailand strand">
+    <img src="https://images.unsplash.com/photo-1504214208698-ea1916a2195a?w=400&h=300&fit=crop" alt="Thailand kultur">
+  </div>
+
+  <!-- 15. FOOTER -->
+  <footer class="site-footer">
+    <strong>Rejseinspiration</strong>Rejseartikler · Events · BEYOND-magasin · Kataloger · Sæsonrejser
+    <strong>Kontakt os</strong>Kontakt · Find rejseekspert · Tilbud · Nyhedsbrev · Gavekort
+    <strong>Om Profil Rejser</strong>Om os · Karriere · Bella Vista · Grønland-initiativ
+    <strong>Praktisk</strong>Betaling · Betingelser · Forsikringer · Persondata · Reklamationer
+    <div class="footer-bottom">+45 77 33 55 00 · CVR 13883408 · Medlem af Rejsegarantifonden</div>
+  </footer>
+
+  <!-- 16. STICKY BAR -->
+  <div class="sticky-bar" id="stickyBar">
+    <img class="sticky-bar-avatar" src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&h=200&fit=crop&crop=face" alt="Alice">
+    <div class="sticky-bar-text">Få et tilbud på denne rejse</div>
+    <div class="sticky-bar-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg></div>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+
+  <!-- 17. TILBUDS-PANEL -->
+  <div class="panel" id="panel">
+    <div class="panel-handle"></div>
+    <div class="panel-header"><button class="panel-close" id="panelClose">&times;</button></div>
+    <div class="panel-body">
+
+      <!-- Expert row -->
+      <div class="panel-expert">
+        <img class="panel-expert-avatar" src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=300&h=300&fit=crop&crop=face" alt="Alice">
+        <div class="panel-expert-info">
+          <div class="panel-expert-name">Lad Alice skræddersy denne rejse til dig</div>
+          <div class="panel-expert-title">Alice Hamurkesen — 12 års erfaring med Sydøstasien</div>
+        </div>
+      </div>
+
+      <!-- Phone block -->
+      <div class="panel-phone">
+        <div class="panel-phone-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></div>
+        <div>
+          <div class="panel-phone-number">77 33 55 00</div>
+          <div class="panel-phone-label">Ring til Alice direkte</div>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <div class="panel-divider">Eller send en forespørgsel</div>
+
+      <!-- Context label -->
+      <div class="context-label">
+        <div>
+          <div class="context-label-text">Din forespørgsel om:</div>
+          <div class="context-label-value">Kultur, boutique-hoteller og strand</div>
+        </div>
+        <div class="context-label-change">Skift</div>
+      </div>
+
+      <!-- Compact form (3 fields) -->
+      <div class="form-group">
+        <label class="form-label">Dit navn</label>
+        <input class="form-input" type="text" placeholder="Fornavn og efternavn">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Telefon eller e-mail</label>
+        <input class="form-input" type="text" placeholder="Så Alice kan kontakte dig">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Fortæl os kort om dine ønsker</label>
+        <textarea class="form-textarea" placeholder="Fx rejsetidspunkt, antal personer, særlige ønsker..."></textarea>
+      </div>
+      <button class="form-submit">Send forespørgsel</button>
+
+    </div>
+  </div>
+
+  <script>
+    const header = document.getElementById('header');
+    const stickyBar = document.getElementById('stickyBar');
+    const overlay = document.getElementById('overlay');
+    const panel = document.getElementById('panel');
+    const panelClose = document.getElementById('panelClose');
+
+    // Header scroll effect
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Sticky bar appears after 5s with 0.8s animation
+    setTimeout(() => { stickyBar.classList.add('visible'); }, 5000);
+
+    // Open panel
+    function openPanel() {
+      overlay.classList.add('active');
+      panel.classList.add('active');
+      stickyBar.classList.remove('visible');
+      document.body.style.overflow = 'hidden';
+    }
+    stickyBar.addEventListener('click', openPanel);
+    document.getElementById('inlineCTA').addEventListener('click', openPanel);
+
+    // Close panel
+    function closePanel() {
+      overlay.classList.remove('active');
+      panel.classList.remove('active');
+      stickyBar.classList.add('visible');
+      document.body.style.overflow = '';
+    }
+    panelClose.addEventListener('click', closePanel);
+    overlay.addEventListener('click', closePanel);
+
+    // Accordion
+    document.querySelectorAll('.accordion-header').forEach(header => {
+      header.addEventListener('click', () => {
+        header.parentElement.classList.toggle('open');
+      });
+    });
+  </script>
+</body>
+</html>

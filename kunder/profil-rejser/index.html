@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profil Rejser — Demo-oversigt</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    html{font-size:16px;-webkit-font-smoothing:antialiased}
+    body{font-family:'DM Sans',-apple-system,BlinkMacSystemFont,sans-serif;color:#000;background:#fff;max-width:600px;margin:0 auto;padding:48px 24px 80px}
+    h1{font-family:'Playfair Display',Georgia,serif;font-weight:300;font-size:32px;color:#1A2C41;margin-bottom:8px}
+    .subtitle{font-size:15px;color:#545454;margin-bottom:48px;line-height:1.5}
+    .demo-group{margin-bottom:40px}
+    .demo-group h2{font-family:'Playfair Display',Georgia,serif;font-weight:300;font-size:20px;color:#1A2C41;margin-bottom:6px}
+    .demo-group p{font-size:13px;color:#545454;margin-bottom:16px}
+    .demo-list{display:flex;flex-direction:column;gap:10px}
+    .demo-link{display:flex;align-items:center;gap:14px;padding:16px 18px;background:#F3F1ED;border-radius:12px;text-decoration:none;color:#1A2C41;transition:background .2s}
+    .demo-link:hover{background:#e8e4de}
+    .demo-number{width:32px;height:32px;border-radius:50%;background:#1A2C41;color:#fff;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .demo-info{flex:1}
+    .demo-title{font-size:15px;font-weight:700;margin-bottom:2px}
+    .demo-desc{font-size:13px;color:#545454}
+    .demo-arrow{color:#545454;flex-shrink:0}
+    .divider{height:1px;background:rgba(0,0,0,.06);margin:8px 0 40px}
+    .tag{display:inline-block;font-size:11px;font-weight:500;color:#9F8974;background:rgba(159,137,116,.1);border-radius:9999px;padding:3px 10px;margin-bottom:12px;text-transform:uppercase;letter-spacing:.5px}
+  </style>
+</head>
+<body>
+
+  <h1>Profil Rejser — Demoer</h1>
+  <p class="subtitle">Interaktive mobil-prototyper til præsentation af nye koncepter. Åbn på mobil eller brug browser i mobilvisning (430px bredde).</p>
+
+  <!-- MOBIL PREVIEW -->
+  <div class="demo-group">
+    <div class="demo-list">
+      <a class="demo-link" href="mobil-preview.html" style="background:var(--navy);border-radius:12px">
+        <div class="demo-number" style="background:var(--white);color:var(--navy)">📱</div>
+        <div class="demo-info">
+          <div class="demo-title" style="color:var(--white)">Mobil preview</div>
+          <div class="demo-desc" style="color:rgba(255,255,255,.7)">Se alle mobilsider i en iPhone-ramme</div>
+        </div>
+        <div class="demo-arrow" style="color:rgba(255,255,255,.7)">→</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- AI-SØGNING -->
+  <div class="demo-group">
+    <span class="tag">Koncept 1</span>
+    <h2>AI-søgning på forsiden</h2>
+    <p>Integreret søgeoplevelse med AI-drevet dialog, inline-resultater og ekspert-CTA.</p>
+    <div class="demo-list">
+      <a class="demo-link" href="demo/index-AI-demo1.html">
+        <div class="demo-number">1</div>
+        <div class="demo-info">
+          <div class="demo-title">Forside med AI-søgning</div>
+          <div class="demo-desc">Søgefelt, slide-up panel, "Fortæl mig mere", opfølgende spørgsmål</div>
+        </div>
+        <div class="demo-arrow">→</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- CTA-STRUKTUR -->
+  <div class="demo-group">
+    <span class="tag">Koncept 2</span>
+    <h2>Optimeret CTA-struktur</h2>
+    <p>Sticky mobilbar, ekspert-kort og kontekstuel formular — telefon som primær konverteringsvej.</p>
+    <div class="demo-list">
+      <a class="demo-link" href="demo-cta/01-forside.html">
+        <div class="demo-number">1</div>
+        <div class="demo-info">
+          <div class="demo-title">Forside</div>
+          <div class="demo-desc">Sticky bar → ring-panel med telefon og "Få et opkald"</div>
+        </div>
+        <div class="demo-arrow">→</div>
+      </a>
+      <a class="demo-link" href="demo-cta/02-find-destination.html">
+        <div class="demo-number">2</div>
+        <div class="demo-info">
+          <div class="demo-title">Find destination</div>
+          <div class="demo-desc">29 destinationer i 7 regioner, sticky bar → ring-panel</div>
+        </div>
+        <div class="demo-arrow">→</div>
+      </a>
+      <a class="demo-link" href="demo-cta/03-thailand.html">
+        <div class="demo-number">3</div>
+        <div class="demo-info">
+          <div class="demo-title">Thailand (destinationsside)</div>
+          <div class="demo-desc">Ekspert-kort, kompakt CTA mellem rejseforslag, sticky bar → ekspert-panel</div>
+        </div>
+        <div class="demo-arrow">→</div>
+      </a>
+      <a class="demo-link" href="demo-cta/04-rejse.html">
+        <div class="demo-number">4</div>
+        <div class="demo-info">
+          <div class="demo-title">Konkret rejse</div>
+          <div class="demo-desc">Fuldt rejseprogram, hoteller, priser, sticky bar → tilbuds-panel med pre-udfyldt kontekst</div>
+        </div>
+        <div class="demo-arrow">→</div>
+      </a>
+      <a class="demo-link" href="demo-cta/05-thailand-desktop.html">
+        <div class="demo-number">5</div>
+        <div class="demo-info">
+          <div class="demo-title">Thailand — desktop</div>
+          <div class="demo-desc">Desktop-version med floating ekspert-pille og panel i nederste højre hjørne</div>
+        </div>
+        <div class="demo-arrow">→</div>
+      </a>
+    </div>
+  </div>
+
+</body>
+</html>

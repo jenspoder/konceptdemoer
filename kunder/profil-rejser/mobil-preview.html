@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profil Rejser — Mobil preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'DM Sans', -apple-system, sans-serif;
+      background: #f0eeea;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 24px;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 300;
+      font-size: 28px;
+      color: #1A2C41;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #545454;
+      margin-bottom: 32px;
+      text-align: center;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 32px;
+    }
+
+    .tab {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: #1A2C41;
+      background: #fff;
+      border: 1.5px solid #1A2C41;
+      border-radius: 9999px;
+      padding: 8px 18px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tab.active {
+      background: #1A2C41;
+      color: #fff;
+    }
+
+    .tab:hover:not(.active) {
+      background: rgba(26,44,65,0.05);
+    }
+
+    /* PHONE FRAME */
+    .phone-frame {
+      width: 390px;
+      height: 844px;
+      border-radius: 48px;
+      background: #111;
+      padding: 14px;
+      box-shadow:
+        0 24px 80px rgba(0,0,0,0.2),
+        0 4px 16px rgba(0,0,0,0.1),
+        inset 0 0 0 2px #333;
+      position: relative;
+    }
+
+    /* Notch */
+    .phone-frame::before {
+      content: '';
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 28px;
+      background: #111;
+      border-radius: 0 0 16px 16px;
+      z-index: 10;
+    }
+
+    /* Dynamic Island dot */
+    .phone-frame::after {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 16px;
+      background: #000;
+      border-radius: 10px;
+      z-index: 11;
+    }
+
+    .phone-screen {
+      width: 100%;
+      height: 100%;
+      border-radius: 36px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .phone-screen iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .demo-label {
+      margin-top: 16px;
+      font-size: 13px;
+      color: #545454;
+      text-align: center;
+    }
+
+    .demo-label strong {
+      color: #1A2C41;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Profil Rejser — Mobil demoer</h1>
+  <p class="subtitle">Vælg en demo for at se den i mobilramme</p>
+
+  <div class="tabs">
+    <button class="tab active" data-src="demo/index-AI-demo1.html">AI-søgning</button>
+    <button class="tab" data-src="demo-cta/01-forside.html">Forside</button>
+    <button class="tab" data-src="demo-cta/02-find-destination.html">Find destination</button>
+    <button class="tab" data-src="demo-cta/03-thailand.html">Thailand</button>
+    <button class="tab" data-src="demo-cta/04-rejse.html">Konkret rejse</button>
+  </div>
+
+  <div class="phone-frame">
+    <div class="phone-screen">
+      <iframe id="demoFrame" src="demo/index-AI-demo1.html"></iframe>
+    </div>
+  </div>
+
+  <div class="demo-label" id="demoLabel"><strong>AI-søgning</strong> — Forside med AI-søgning</div>
+
+  <script>
+    const tabs = document.querySelectorAll('.tab');
+    const frame = document.getElementById('demoFrame');
+    const label = document.getElementById('demoLabel');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        frame.src = tab.dataset.src;
+        label.innerHTML = `<strong>${tab.textContent}</strong>`;
+      });
+    });
+  </script>
+</body>
+</html>

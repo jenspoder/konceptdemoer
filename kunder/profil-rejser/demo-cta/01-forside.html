@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Profil Rejser — Forside (CTA-demo)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    html{font-size:16px;-webkit-font-smoothing:antialiased}
+    body{font-family:'DM Sans',-apple-system,BlinkMacSystemFont,sans-serif;color:#000;background:#fff;max-width:430px;margin:0 auto;overflow-x:hidden;padding-bottom:80px}
+    .font-heading{font-family:'Playfair Display',Georgia,serif;font-weight:300}
+    :root{--navy:#1A2C41;--white:#FFFFFF;--light-bg:#F3F1ED;--gray-dark:#545454;--gray-mid:#313131;--gold:#9F8974}
+    a{color:inherit;text-decoration:none}
+
+    /* HEADER */
+    .header{position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:transparent;transition:background .3s}
+    .header.scrolled{background:var(--white);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+    .header-logo{font-weight:700;font-size:14px;color:var(--white);text-transform:uppercase;letter-spacing:.5px;transition:color .3s}
+    .header.scrolled .header-logo{color:var(--navy)}
+    .header-actions{display:flex;gap:16px;align-items:center}
+    .header-cta{font-size:12px;font-weight:500;color:var(--white);background:0 0;border:1px solid rgba(255,255,255,.5);border-radius:9999px;padding:6px 14px;cursor:pointer;transition:all .3s}
+    .header.scrolled .header-cta{color:var(--navy);border-color:var(--navy)}
+    .header-menu{display:flex;flex-direction:column;gap:4px;cursor:pointer}
+    .header-menu span{display:block;width:20px;height:2px;background:var(--white);border-radius:1px;transition:background .3s}
+    .header.scrolled .header-menu span{background:var(--navy)}
+
+    /* HERO */
+    .hero{position:relative;height:50vh;min-height:320px;overflow:hidden;display:flex;align-items:flex-end;padding:0 24px 48px}
+    .hero-image{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(26,44,65,.15),rgba(26,44,65,.50)),url('https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=860&h=1200&fit=crop&crop=center') center/cover no-repeat}
+    .hero-content{position:relative;z-index:1}
+    .hero-content h1{font-size:42px;line-height:1.1;color:var(--white);margin-bottom:12px}
+    .hero-content p{font-size:15px;color:rgba(255,255,255,.85);line-height:1.5;max-width:300px}
+
+    /* SECTIONS */
+    .section{padding:40px 24px}
+    .section-sm{padding:24px 24px}
+    .section h2,.section-title{font-size:22px;line-height:1.3;color:var(--navy);margin-bottom:16px}
+
+    /* EXPERT SCROLL */
+    .expert-scroll{padding:32px 24px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+    .expert-scroll-inner{display:flex;gap:20px}
+    .expert-pill{display:flex;flex-direction:column;align-items:center;gap:8px;min-width:72px}
+    .expert-pill img{width:64px;height:64px;border-radius:50%;object-fit:cover}
+    .expert-pill span{font-size:12px;color:var(--gray-dark);text-align:center}
+
+    /* INSPIRATION GRID */
+    .inspo-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .inspo-card{position:relative;height:160px;border-radius:10px;overflow:hidden;display:flex;align-items:flex-end;padding:14px}
+    .inspo-card::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(26,44,65,.6) 0%,transparent 50%)}
+    .inspo-card span{position:relative;z-index:1;font-size:14px;font-weight:500;color:var(--white);line-height:1.3}
+
+    /* GRAPHIC BOW */
+    .bow-img{width:100%;height:240px;object-fit:cover}
+    .bow-text{padding:28px 24px;background:var(--light-bg)}
+    .bow-text h3{font-size:22px;color:var(--navy);margin-bottom:12px;line-height:1.3}
+    .bow-text p{font-size:14px;line-height:1.6;color:var(--gray-dark);margin-bottom:16px}
+    .btn-primary{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:var(--white);background:var(--navy);border:none;border-radius:9999px;padding:12px 24px;cursor:pointer;display:inline-block}
+    .btn-outline{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;color:var(--navy);background:0 0;border:1.5px solid var(--navy);border-radius:9999px;padding:11px 22px;cursor:pointer;display:inline-block}
+
+    /* QUOTE */
+    .quote-section{position:relative;min-height:300px;display:flex;align-items:flex-end;padding:24px}
+    .quote-section::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(26,44,65,.7),transparent 60%)}
+    .quote-content{position:relative;z-index:1;color:var(--white)}
+    .quote-content blockquote{font-family:'Playfair Display',serif;font-weight:300;font-size:18px;line-height:1.5;margin-bottom:8px;font-style:italic}
+    .quote-content cite{font-size:13px;color:rgba(255,255,255,.7);font-style:normal}
+
+    /* DESTINATION CARDS */
+    .dest-cards{display:flex;flex-direction:column;gap:16px}
+    .dest-card{position:relative;height:200px;border-radius:12px;overflow:hidden;display:flex;align-items:flex-end;padding:20px}
+    .dest-card::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(26,44,65,.6),transparent 60%)}
+    .dest-card span{position:relative;z-index:1;font-family:'Playfair Display',serif;font-weight:300;font-size:22px;color:var(--white)}
+
+    /* CRUISE */
+    .cruise-section{background:var(--navy);overflow:hidden}
+    .cruise-img{width:100%;height:200px;object-fit:cover}
+    .cruise-text{padding:28px 24px}
+    .cruise-text h3{font-size:22px;color:var(--white);margin-bottom:12px;line-height:1.3}
+    .cruise-text p{font-size:14px;line-height:1.6;color:rgba(255,255,255,.7);margin-bottom:16px}
+    .btn-white{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:var(--navy);background:var(--white);border:none;border-radius:9999px;padding:12px 24px;cursor:pointer}
+
+    /* EVENT */
+    .event-img{width:100%;height:220px;object-fit:cover}
+
+    /* TRUST */
+    .trust{padding:40px 24px;background:var(--light-bg);text-align:center}
+    .trust-icons{display:flex;justify-content:center;gap:32px;margin-bottom:20px}
+    .trust-icon{font-size:32px}
+    .trust h3{font-size:20px;color:var(--navy);margin-bottom:12px}
+    .trust p{font-size:14px;line-height:1.6;color:var(--gray-dark);max-width:340px;margin:0 auto}
+
+    /* NEWSLETTER */
+    .newsletter{padding:40px 24px;text-align:center}
+    .newsletter h3{font-size:20px;color:var(--navy);margin-bottom:8px}
+    .newsletter p{font-size:14px;color:var(--gray-dark);margin-bottom:16px;line-height:1.5}
+    .newsletter-input{width:100%;font-family:'DM Sans',sans-serif;font-size:15px;padding:12px 16px;border:1px solid rgba(26,44,65,.15);border-radius:10px;background:var(--light-bg);margin-bottom:12px;outline:none;-webkit-appearance:none}
+    .newsletter-btn{width:100%;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;color:var(--white);background:var(--navy);border:none;border-radius:9999px;padding:14px;cursor:pointer}
+
+    /* GALLERY */
+    .gallery{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;padding:0}
+    .gallery img{width:100%;height:140px;object-fit:cover}
+
+    /* FOOTER */
+    .site-footer{background:var(--navy);color:rgba(255,255,255,.7);padding:40px 24px;font-size:13px;line-height:1.8}
+    .site-footer strong{color:var(--white);font-weight:500;display:block;margin-bottom:8px;margin-top:20px}
+    .site-footer strong:first-child{margin-top:0}
+    .footer-bottom{margin-top:32px;padding-top:20px;border-top:1px solid rgba(255,255,255,.1);font-size:12px;color:rgba(255,255,255,.4)}
+
+    /* STICKY BAR */
+    .sticky-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%) translateY(100%);width:100%;max-width:430px;z-index:150;background:var(--gold);box-shadow:0 -2px 12px rgba(0,0,0,.15);padding:12px 20px;padding-bottom:max(12px,env(safe-area-inset-bottom));display:flex;align-items:center;gap:14px;cursor:pointer;transition:transform .8s cubic-bezier(.16,1,.3,1)}
+    .sticky-bar.visible{transform:translateX(-50%) translateY(0)}
+    .sticky-bar-avatar{width:48px;height:48px;border-radius:50%;object-fit:cover;flex-shrink:0}
+    .sticky-bar-text{flex:1;font-size:15px;font-weight:700;color:var(--white);line-height:1.3}
+    .sticky-bar-arrow{flex-shrink:0;color:var(--white)}
+    .sticky-bar-arrow svg{width:20px;height:20px}
+
+    /* OVERLAY & PANEL */
+    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
+    .overlay.active{opacity:1;visibility:visible}
+    .panel{position:fixed;bottom:0;left:50%;transform:translateX(-50%) translateY(100%);width:100%;max-width:430px;z-index:300;background:var(--white);border-radius:16px 16px 0 0;box-shadow:0 -4px 24px rgba(0,0,0,.15);transition:transform .3s cubic-bezier(.32,.72,0,1);overflow:hidden}
+    .panel.active{transform:translateX(-50%) translateY(0)}
+    .panel-handle{display:flex;justify-content:center;padding:12px 0 4px}
+    .panel-handle::after{content:'';width:36px;height:4px;background:#D0D0D0;border-radius:2px}
+    .panel-header{display:flex;justify-content:flex-end;padding:4px 20px 12px}
+    .panel-close{width:32px;height:32px;border-radius:50%;border:none;background:var(--light-bg);color:var(--gray-mid);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+    .panel-body{padding:0 24px 40px}
+    .panel-title{font-family:'Playfair Display',serif;font-weight:300;font-size:24px;color:var(--navy);margin-bottom:12px;line-height:1.3}
+    .panel-desc{font-size:15px;line-height:1.6;color:var(--gray-dark);margin-bottom:28px}
+    .panel-phone{display:flex;align-items:center;gap:12px;padding:16px 20px;background:var(--light-bg);border-radius:12px;margin-bottom:16px}
+    .panel-phone-icon{width:44px;height:44px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .panel-phone-icon svg{width:20px;height:20px;color:var(--white)}
+    .panel-phone-number{font-size:20px;font-weight:700;color:var(--navy)}
+    .panel-phone-label{font-size:13px;color:var(--gray-dark);margin-top:2px}
+    .panel-hours{font-size:13px;color:var(--gray-dark);text-align:center;padding:8px 0}
+  </style>
+</head>
+<body>
+
+  <header class="header" id="header">
+    <div class="header-logo">Profil Rejser</div>
+    <div class="header-actions">
+      <button class="header-cta">Søg</button>
+      <div class="header-menu"><span></span><span></span><span></span></div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-image"></div>
+    <div class="hero-content">
+      <h1 class="font-heading">Beyond ordinary travel</h1>
+      <p>Skræddersyede rejser til verdens mest fascinerende destinationer</p>
+    </div>
+  </section>
+
+  <!-- INSPIRATION GRID -->
+  <section class="section">
+    <h2 class="font-heading">Rejseinspiration</h2>
+    <div class="inspo-grid">
+      <div class="inspo-card" style="background:url('https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=400&h=300&fit=crop') center/cover"><span>Nordlyset danser mellem stjernerne</span></div>
+      <div class="inspo-card" style="background:url('https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop') center/cover"><span>Belmond Hotels</span></div>
+      <div class="inspo-card" style="background:url('https://images.unsplash.com/photo-1528181304800-259b08848526?w=400&h=300&fit=crop') center/cover"><span>Cecilie Hother i Thailand</span></div>
+      <div class="inspo-card" style="background:url('https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?w=400&h=300&fit=crop') center/cover"><span>Junglens ro i Borneo</span></div>
+      <div class="inspo-card" style="background:url('https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=400&h=300&fit=crop') center/cover"><span>Guide til Det Indiske Ocean</span></div>
+      <div class="inspo-card" style="background:url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&h=300&fit=crop') center/cover"><span>Nordisk gastronomi</span></div>
+    </div>
+  </section>
+
+  <!-- GRAPHIC BOW: ALTID LIDT MERE -->
+  <div>
+    <img class="bow-img" src="https://images.unsplash.com/photo-1531168556467-80aace0d0144?w=800&h=500&fit=crop" alt="Hundeslæde Grønland">
+    <div class="bow-text">
+      <h3 class="font-heading">Altid lidt mere</h3>
+      <p>Hos Profil Rejser handler det om mere end bare en rejse. Vi skaber oplevelser der beriger, overrasker og bliver til minder for livet. Med over 40 års erfaring ved vi, at de bedste rejser opstår, når nogen tager sig tid til at lytte.</p>
+      <button class="btn-primary">Ring på 77 33 55 00</button>
+    </div>
+  </div>
+
+  <!-- QUOTE -->
+  <section class="quote-section" style="background:url('https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=800&h=600&fit=crop') center/cover">
+    <div class="quote-content">
+      <blockquote>"Maldiverne er ikke bare en destination — det er en følelse. Når du vågner til lyden af bølger og ser ud over det turkise vand, forstår du hvorfor."</blockquote>
+      <cite>— Elsebeth Thomsen, rejseekspert</cite>
+    </div>
+  </section>
+
+  <!-- CRUISE -->
+  <section class="cruise-section">
+    <img class="cruise-img" src="https://images.unsplash.com/photo-1548574505-5e239809ee19?w=800&h=400&fit=crop" alt="Krydstogtskib">
+    <div class="cruise-text">
+      <h3 class="font-heading">Find dit næste krydstogt</h3>
+      <p>Oplev verden fra havet med Bella Vista. Fra Middelhavet til Arktis — vi finder det perfekte krydstogt til dig.</p>
+      <button class="btn-white">Se krydstogter</button>
+    </div>
+  </section>
+
+  <!-- VÆLG DIT EVENTYR -->
+  <section class="section">
+    <h2 class="font-heading">Vælg dit eventyr</h2>
+    <div class="dest-cards">
+      <div class="dest-card" style="background:url('https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=800&h=500&fit=crop') center/cover"><span>Maldiverne</span></div>
+      <div class="dest-card" style="background:url('https://images.unsplash.com/photo-1528181304800-259b08848526?w=800&h=500&fit=crop') center/cover"><span>Thailand</span></div>
+      <div class="dest-card" style="background:url('https://images.unsplash.com/photo-1531168556467-80aace0d0144?w=800&h=500&fit=crop') center/cover"><span>Grønland</span></div>
+    </div>
+  </section>
+
+  <!-- EVENTS -->
+  <div>
+    <img class="event-img" src="https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&h=440&fit=crop" alt="Safari ballon">
+    <div class="bow-text">
+      <h3 class="font-heading">Deltag i Profil Rejser Events</h3>
+      <p>Vi inviterer regelmæssigt til foredrag, messedage og skibsbesøg, hvor du kan møde vores eksperter og få inspiration til din næste rejse.</p>
+      <button class="btn-outline">Se kommende events</button>
+    </div>
+  </div>
+
+  <!-- MERE DESTINATION CARDS -->
+  <section class="section">
+    <h2 class="font-heading">Populære destinationer</h2>
+    <div class="dest-cards">
+      <div class="dest-card" style="background:url('https://images.unsplash.com/photo-1545579133-99bb5ab189bd?w=800&h=500&fit=crop') center/cover"><span>Vietnam</span></div>
+      <div class="dest-card" style="background:url('https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800&h=500&fit=crop') center/cover"><span>Japan</span></div>
+      <div class="dest-card" style="background:url('https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?w=800&h=500&fit=crop') center/cover"><span>Mauritius</span></div>
+      <div class="dest-card" style="height:120px;background:var(--light-bg)"><span style="color:var(--navy);font-size:18px">Se flere destinationer →</span></div>
+    </div>
+  </section>
+
+  <!-- TRUST -->
+  <div class="trust">
+    <div class="trust-icons"><span class="trust-icon">🌍</span><span class="trust-icon">📌</span><span class="trust-icon">🛡️</span></div>
+    <h3 class="font-heading">Din rejse er vores håndværk</h3>
+    <p>Med over 40 års erfaring og dedikerede rejseeksperter sørger vi for at din rejse er gennemtænkt, tryg og uforglemmelig — fra første opkald til du er hjemme igen.</p>
+  </div>
+
+  <!-- NEWSLETTER -->
+  <div class="newsletter">
+    <h3 class="font-heading">Få inspiration i din indbakke</h3>
+    <p>Tilmeld dig vores nyhedsbrev og deltag i konkurrencen om et gavekort på 5.000 kr.</p>
+    <input class="newsletter-input" type="email" placeholder="Din e-mailadresse">
+    <button class="newsletter-btn">Tilmeld</button>
+  </div>
+
+  <!-- GALLERY -->
+  <div class="gallery">
+    <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=400&h=300&fit=crop" alt="Bali">
+    <img src="https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?w=400&h=300&fit=crop" alt="Maldiverne">
+    <img src="https://images.unsplash.com/photo-1520769669658-f07657f5a307?w=400&h=300&fit=crop" alt="Norge">
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <strong>Rejseinspiration</strong>Rejseartikler · Events · BEYOND-magasin · Kataloger · Sæsonrejser
+    <strong>Kontakt os</strong>Kontakt · Find rejseekspert · Tilbud · Nyhedsbrev · Gavekort
+    <strong>Om Profil Rejser</strong>Om os · Karriere · Bella Vista · Grønland-initiativ
+    <strong>Praktisk</strong>Betaling · Betingelser · Forsikringer · Persondata · Reklamationer
+    <div class="footer-bottom">+45 77 33 55 00 · CVR 13883408 · Medlem af Rejsegarantifonden</div>
+  </footer>
+
+  <!-- STICKY BAR -->
+  <div class="sticky-bar" id="stickyBar">
+    <img class="sticky-bar-avatar" src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&h=200&fit=crop&crop=face" alt="Rejseekspert">
+    <div class="sticky-bar-text">Lad os finde din drømmerejse sammen</div>
+    <div class="sticky-bar-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg></div>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+
+  <div class="panel" id="panel">
+    <div class="panel-handle"></div>
+    <div class="panel-header"><button class="panel-close" id="panelClose">&times;</button></div>
+    <div class="panel-body">
+      <div class="panel-title font-heading">Lad os finde din drømmerejse sammen</div>
+      <p class="panel-desc">Vores rejseeksperter hjælper dig med at finde den perfekte rejse — uanset om du drømmer om strand, kultur eller eventyr.</p>
+      <div class="panel-phone">
+        <div class="panel-phone-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></div>
+        <div><div class="panel-phone-number">77 33 55 00</div><div class="panel-phone-label">Profil Rejser</div></div>
+      </div>
+      <div class="panel-hours">Man–fre 9–17 · Lør 10–14</div>
+      <div style="text-align:center;margin-top:20px;padding-top:20px;border-top:1px solid rgba(0,0,0,.06)">
+        <button style="font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;color:var(--navy);background:0 0;border:1.5px solid var(--navy);border-radius:9999px;padding:12px 28px;cursor:pointer;width:100%">Få et opkald fra os</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const header=document.getElementById('header'),stickyBar=document.getElementById('stickyBar'),overlay=document.getElementById('overlay'),panel=document.getElementById('panel'),panelClose=document.getElementById('panelClose');
+    window.addEventListener('scroll',()=>{header.classList.toggle('scrolled',window.scrollY>50)});
+    setTimeout(()=>{stickyBar.classList.add('visible')},5000);
+    stickyBar.addEventListener('click',()=>{overlay.classList.add('active');panel.classList.add('active');stickyBar.classList.remove('visible');document.body.style.overflow='hidden'});
+    function closePanel(){overlay.classList.remove('active');panel.classList.remove('active');stickyBar.classList.add('visible');document.body.style.overflow=''}
+    panelClose.addEventListener('click',closePanel);overlay.addEventListener('click',closePanel);
+  </script>
+</body>
+</html>

@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profil Rejser — Thailand (Desktop CTA-demo)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    html{font-size:16px;-webkit-font-smoothing:antialiased}
+    body{font-family:'DM Sans',-apple-system,BlinkMacSystemFont,sans-serif;color:#000;background:#fff;overflow-x:hidden}
+    .font-heading{font-family:'Playfair Display',Georgia,serif;font-weight:300}
+    :root{--navy:#1A2C41;--white:#FFFFFF;--light-bg:#F3F1ED;--gray-dark:#545454;--gray-mid:#313131;--gold:#9F8974}
+    a{color:inherit;text-decoration:none}
+    .container{max-width:1200px;margin:0 auto;padding-left:40px;padding-right:40px}
+
+    /* HEADER */
+    .header{position:fixed;top:0;left:0;width:100%;z-index:100;background:transparent;transition:background .3s,box-shadow .3s}
+    .header.scrolled{background:var(--white);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+    .header-inner{max-width:1200px;margin:0 auto;padding:18px 40px;display:flex;align-items:center;justify-content:space-between}
+    .header-logo{font-weight:700;font-size:15px;color:var(--white);text-transform:uppercase;letter-spacing:.5px;transition:color .3s}
+    .header.scrolled .header-logo{color:var(--navy)}
+    .header-nav{display:flex;gap:32px;align-items:center}
+    .header-nav-link{font-size:14px;font-weight:500;color:var(--white);transition:color .3s;cursor:pointer}
+    .header.scrolled .header-nav-link{color:var(--navy)}
+    .header-cta{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--white);background:0 0;border:1px solid rgba(255,255,255,.5);border-radius:9999px;padding:8px 20px;cursor:pointer;transition:all .3s}
+    .header.scrolled .header-cta{color:var(--navy);border-color:var(--navy)}
+
+    /* HERO */
+    .hero{position:relative;height:50vh;min-height:400px;overflow:hidden;display:flex;align-items:flex-end}
+    .hero-image{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(26,44,65,.15),rgba(26,44,65,.55)),url('https://images.unsplash.com/photo-1528181304800-259b08848526?w=1600&h=900&fit=crop&crop=center') center/cover no-repeat}
+    .hero-content{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:0 40px 56px;width:100%}
+    .hero-content h1{font-size:52px;line-height:1.1;color:var(--white);margin-bottom:12px}
+    .hero-content p{font-size:18px;color:rgba(255,255,255,.85);line-height:1.5;max-width:500px}
+
+    /* SECTIONS */
+    .section{padding:56px 0}
+    .section h2{font-size:28px;line-height:1.3;color:var(--navy);margin-bottom:24px}
+
+    /* BUTTONS */
+    .btn-primary{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:var(--white);background:var(--navy);border:none;border-radius:9999px;padding:13px 28px;cursor:pointer;display:inline-block;text-align:center;transition:background .2s}
+    .btn-primary:hover{background:#243a54}
+    .btn-outline{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;color:var(--navy);background:0 0;border:1.5px solid var(--navy);border-radius:9999px;padding:12px 26px;cursor:pointer;display:inline-block;text-align:center;transition:all .2s}
+    .btn-outline:hover{background:var(--navy);color:var(--white)}
+
+    /* INTRO TEXT */
+    .intro-text{padding:48px 0}
+    .intro-text p{font-size:17px;line-height:1.8;color:var(--gray-dark);max-width:800px}
+
+    /* DESTINATION GRID 4 columns */
+    .dest-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+    .dest-grid-card{position:relative;height:220px;border-radius:12px;overflow:hidden;display:flex;align-items:flex-end;padding:20px;cursor:pointer;transition:transform .2s}
+    .dest-grid-card:hover{transform:scale(1.02)}
+    .dest-grid-card::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(26,44,65,.6),transparent 60%)}
+    .dest-grid-card span{position:relative;z-index:1;font-family:'Playfair Display',serif;font-weight:300;font-size:19px;color:var(--white);line-height:1.2}
+
+    /* POPULAR PILLS */
+    .popular-pills{padding:40px 0}
+    .popular-pills h3{font-size:22px;color:var(--navy);margin-bottom:16px}
+    .pills-wrap{display:flex;gap:10px;flex-wrap:wrap}
+    .pill-tag{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--navy);background:0 0;border:1.5px solid var(--navy);border-radius:9999px;padding:9px 20px;cursor:pointer;white-space:nowrap;transition:all .2s}
+    .pill-tag:hover{background:var(--navy);color:var(--white)}
+
+    /* EXPERT CARD — horizontal */
+    .expert-card{background:var(--light-bg);padding:48px 0}
+    .expert-card-inner{display:flex;align-items:center;gap:40px}
+    .expert-card-photo{width:100px;height:100px;border-radius:50%;object-fit:cover;flex-shrink:0}
+    .expert-card-content{flex:1}
+    .expert-card-name{font-family:'Playfair Display',serif;font-weight:300;font-size:22px;color:var(--navy);margin-bottom:4px}
+    .expert-card-subtitle{font-size:14px;color:var(--gray-dark);margin-bottom:20px}
+    .expert-card-buttons{display:flex;gap:12px;align-items:center}
+
+    /* TRAVEL CARDS — 3 columns */
+    .travel-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+    .travel-card{border-radius:12px;overflow:hidden;background:var(--white);box-shadow:0 2px 16px rgba(0,0,0,.07);transition:transform .2s,box-shadow .2s}
+    .travel-card:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,.1)}
+    .travel-card-img{width:100%;height:220px;object-fit:cover}
+    .travel-card-body{padding:18px 20px 22px}
+    .travel-card-title{font-family:'Playfair Display',serif;font-weight:300;font-size:18px;color:var(--navy);line-height:1.3;margin-bottom:10px}
+    .travel-card-meta{font-size:13px;color:var(--gray-dark);display:flex;justify-content:space-between;align-items:center}
+    .travel-card-price{font-weight:700;color:var(--navy)}
+
+    /* COMPACT CTA — horizontal */
+    .compact-cta{background:var(--light-bg);padding:48px 0}
+    .compact-cta-inner{display:flex;align-items:center;justify-content:space-between;gap:32px}
+    .compact-cta p{font-size:18px;color:var(--navy);line-height:1.5;font-weight:500;margin:0}
+    .compact-cta .btn-primary{flex-shrink:0;font-size:14px;padding:14px 28px}
+
+    /* INSPIRATION LINKS */
+    .inspo-links{padding:56px 0}
+    .inspo-links h3{font-size:26px;color:var(--navy);margin-bottom:24px}
+    .inspo-link-item{display:block;font-size:16px;color:var(--navy);text-decoration:underline;text-underline-offset:3px;padding:14px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.4;transition:color .2s}
+    .inspo-link-item:hover{color:var(--gold)}
+    .inspo-link-item:last-child{border-bottom:none}
+
+    /* EXPERT FULL */
+    .expert-full{padding:56px 0;text-align:center}
+    .expert-full-photo{width:140px;height:140px;border-radius:50%;object-fit:cover;margin-bottom:18px}
+    .expert-full-name{font-family:'Playfair Display',serif;font-weight:300;font-size:28px;color:var(--navy);margin-bottom:4px}
+    .expert-full-title{font-size:15px;color:var(--gray-dark);margin-bottom:28px;line-height:1.5}
+    .expert-full-buttons{display:flex;gap:14px;justify-content:center}
+
+    /* TEXT SECTION */
+    .text-section{padding:56px 0}
+    .text-section h3{font-family:'Playfair Display',serif;font-weight:300;font-size:26px;color:var(--navy);margin-bottom:18px;line-height:1.3}
+    .text-section-cols{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+    .text-section p{font-size:15px;line-height:1.8;color:var(--gray-dark);margin-bottom:0}
+
+    /* EXPERIENCE CARDS — 2 columns, image+text side by side */
+    .exp-cards-section{padding:56px 0}
+    .exp-card{display:grid;grid-template-columns:1fr 1fr;gap:0;overflow:hidden;border-radius:12px;margin-bottom:24px;background:var(--white);box-shadow:0 2px 16px rgba(0,0,0,.06)}
+    .exp-card:nth-child(even){direction:rtl}
+    .exp-card:nth-child(even) > *{direction:ltr}
+    .exp-card-img-wrap{overflow:hidden}
+    .exp-card-img{width:100%;height:100%;min-height:300px;object-fit:cover;display:block}
+    .exp-card-body{padding:40px;display:flex;flex-direction:column;justify-content:center}
+    .exp-card-body h4{font-family:'Playfair Display',serif;font-weight:300;font-size:22px;color:var(--navy);margin-bottom:14px;line-height:1.3}
+    .exp-card-body p{font-size:15px;line-height:1.7;color:var(--gray-dark)}
+
+    /* STRANDFERIE */
+    .strand-section{display:grid;grid-template-columns:1fr 1fr;gap:0;overflow:hidden;border-radius:12px;box-shadow:0 2px 16px rgba(0,0,0,.06)}
+    .strand-img{width:100%;height:100%;min-height:320px;object-fit:cover;display:block}
+    .strand-text{padding:48px 40px;background:var(--light-bg);display:flex;flex-direction:column;justify-content:center}
+    .strand-text h3{font-family:'Playfair Display',serif;font-weight:300;font-size:26px;color:var(--navy);margin-bottom:14px;line-height:1.3}
+    .strand-text p{font-size:15px;line-height:1.8;color:var(--gray-dark)}
+
+    /* WEATHER */
+    .weather{padding:56px 0;background:var(--navy);color:var(--white);text-align:center}
+    .weather h3{font-family:'Playfair Display',serif;font-weight:300;font-size:28px;margin-bottom:8px}
+    .weather-best{font-size:16px;color:rgba(255,255,255,.7);margin-bottom:28px}
+    .weather-stats{display:flex;justify-content:center;gap:64px}
+    .weather-stat-label{font-size:12px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+    .weather-stat-value{font-size:26px;font-weight:700}
+
+    /* ALT SKRAEDDERSYES */
+    .custom-section{display:grid;grid-template-columns:1fr 1fr;gap:0;overflow:hidden;border-radius:12px;box-shadow:0 2px 16px rgba(0,0,0,.06)}
+    .custom-img{width:100%;height:100%;min-height:320px;object-fit:cover;display:block}
+    .custom-text{padding:48px 40px;display:flex;flex-direction:column;justify-content:center}
+    .custom-text h3{font-family:'Playfair Display',serif;font-weight:300;font-size:26px;color:var(--navy);margin-bottom:14px;line-height:1.3}
+    .custom-text p{font-size:15px;line-height:1.8;color:var(--gray-dark)}
+
+    /* PRACTICAL LINK */
+    .practical-link{padding:24px 0;border-top:1px solid rgba(0,0,0,.06);border-bottom:1px solid rgba(0,0,0,.06)}
+    .practical-link a{font-size:16px;font-weight:500;color:var(--navy);text-decoration:underline;text-underline-offset:3px;display:flex;align-items:center;justify-content:space-between;transition:color .2s}
+    .practical-link a:hover{color:var(--gold)}
+    .practical-link a::after{content:'\203A';font-size:24px;color:var(--gray-dark);text-decoration:none}
+
+    /* NEWSLETTER */
+    .newsletter{padding:56px 0;text-align:center}
+    .newsletter h3{font-size:24px;color:var(--navy);margin-bottom:10px}
+    .newsletter p{font-size:15px;color:var(--gray-dark);margin-bottom:24px;line-height:1.5}
+    .newsletter-form{display:flex;gap:12px;max-width:500px;margin:0 auto}
+    .newsletter-input{flex:1;font-family:'DM Sans',sans-serif;font-size:15px;padding:14px 18px;border:1px solid rgba(26,44,65,.15);border-radius:10px;background:var(--light-bg);outline:none}
+    .newsletter-input:focus{border-color:var(--navy);background:var(--white)}
+    .newsletter-btn{font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;color:var(--white);background:var(--navy);border:none;border-radius:9999px;padding:14px 32px;cursor:pointer;flex-shrink:0;transition:background .2s}
+    .newsletter-btn:hover{background:#243a54}
+
+    /* GALLERY */
+    .gallery{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;padding:0}
+    .gallery img{width:100%;height:260px;object-fit:cover}
+
+    /* FOOTER */
+    .site-footer{background:var(--navy);color:rgba(255,255,255,.7);padding:56px 0;font-size:14px;line-height:1.8}
+    .footer-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:32px}
+    .footer-col strong{color:var(--white);font-weight:500;display:block;margin-bottom:10px}
+    .footer-bottom{margin-top:40px;padding-top:24px;border-top:1px solid rgba(255,255,255,.1);font-size:13px;color:rgba(255,255,255,.4)}
+
+    /* FLOATING CTA */
+    .floating-cta{position:fixed;bottom:32px;right:32px;z-index:150;display:flex;align-items:center;gap:12px;background:var(--gold);color:var(--white);border:none;border-radius:9999px;padding:10px 24px 10px 10px;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,.2);opacity:0;transform:translateY(20px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1),background .2s;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600}
+    .floating-cta.visible{opacity:1;transform:translateY(0)}
+    .floating-cta:hover{background:#8a7563}
+    .floating-cta-avatar{width:40px;height:40px;border-radius:50%;object-fit:cover;flex-shrink:0}
+    .floating-cta-text{white-space:nowrap}
+    .floating-cta-chevron{flex-shrink:0;margin-left:4px}
+    .floating-cta-chevron svg{width:18px;height:18px;display:block}
+
+    /* DESKTOP PANEL */
+    .desk-panel{position:fixed;bottom:100px;right:32px;z-index:300;width:400px;max-height:70vh;background:var(--white);border-radius:16px;box-shadow:0 8px 40px rgba(0,0,0,.18);display:flex;flex-direction:column;opacity:0;transform:translateY(20px) scale(.96);visibility:hidden;transition:opacity .35s cubic-bezier(.16,1,.3,1),transform .35s cubic-bezier(.16,1,.3,1),visibility .35s}
+    .desk-panel.active{opacity:1;transform:translateY(0) scale(1);visibility:visible}
+    .desk-panel-header{display:flex;justify-content:flex-end;padding:16px 20px 0;flex-shrink:0}
+    .desk-panel-close{width:32px;height:32px;border-radius:50%;border:none;background:var(--light-bg);color:var(--gray-mid);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s}
+    .desk-panel-close:hover{background:#e0ddd8}
+    .desk-panel-body{flex:1;overflow-y:auto;padding:0 28px 32px}
+    .panel-avatar{width:96px;height:96px;border-radius:50%;object-fit:cover;margin:0 auto 14px;display:block}
+    .panel-name{font-family:'Playfair Display',serif;font-weight:300;font-size:22px;color:var(--navy);text-align:center;margin-bottom:4px}
+    .panel-title-text{font-size:13px;color:var(--gray-dark);text-align:center;margin-bottom:24px}
+    .panel-phone{display:flex;align-items:center;gap:12px;padding:16px 20px;background:var(--light-bg);border-radius:12px;margin-bottom:20px}
+    .panel-phone-icon{width:44px;height:44px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .panel-phone-icon svg{width:20px;height:20px;color:var(--white)}
+    .panel-phone-number{font-size:20px;font-weight:700;color:var(--navy)}
+    .panel-phone-label{font-size:13px;color:var(--gray-dark);margin-top:2px}
+    .panel-divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--gray-dark);font-size:13px}
+    .panel-divider::before,.panel-divider::after{content:'';flex:1;height:1px;background:rgba(0,0,0,.08)}
+    .panel-form{display:flex;flex-direction:column;gap:12px}
+    .panel-input{width:100%;font-family:'DM Sans',sans-serif;font-size:14px;padding:12px 16px;border:1px solid rgba(26,44,65,.15);border-radius:10px;background:var(--light-bg);outline:none}
+    .panel-input:focus,.panel-textarea:focus{border-color:var(--navy);background:var(--white)}
+    .panel-textarea{width:100%;font-family:'DM Sans',sans-serif;font-size:14px;padding:12px 16px;border:1px solid rgba(26,44,65,.15);border-radius:10px;background:var(--light-bg);outline:none;resize:none;height:100px}
+    .panel-send{width:100%;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;color:var(--white);background:var(--navy);border:none;border-radius:9999px;padding:14px;cursor:pointer;margin-top:4px;transition:background .2s}
+    .panel-send:hover{background:#243a54}
+  </style>
+</head>
+<body>
+
+  <!-- 1. HEADER -->
+  <header class="header" id="header">
+    <div class="header-inner">
+      <div class="header-logo">Profil Rejser</div>
+      <div class="header-nav">
+        <span class="header-nav-link">Destinationer</span>
+        <span class="header-nav-link">Rejseforslag</span>
+        <span class="header-nav-link">Inspiration</span>
+        <span class="header-nav-link">Om os</span>
+        <button class="header-cta">Kontakt os</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 2. HERO -->
+  <section class="hero">
+    <div class="hero-image"></div>
+    <div class="hero-content">
+      <h1 class="font-heading">Rejser til Thailand</h1>
+      <p>Fra bjergenes stilhed til storbyliv og idylliske øer</p>
+    </div>
+  </section>
+
+  <!-- 3. INTRO TEXT -->
+  <div class="container">
+    <div class="intro-text">
+      <p>Fra bjergenes stilhed til storbyliv og idylliske øer. Thailand er et land af muligheder. Kontraster. Men altid i farver. Her finder du templer i guld, markeder der summer af liv, strande så hvide at de næsten blænder, og en natur der rækker fra regnskov til kalkstensklipper. Thailand er stedet, hvor du kan kombinere det hele — eller bare vælge én ting og gøre den ordentligt. Vi hjælper dig med begge dele.</p>
+    </div>
+  </div>
+
+  <!-- 4. DESTINATION CARDS 4 columns -->
+  <div class="container">
+    <section class="section">
+      <h2 class="font-heading">Udforsk Thailand</h2>
+      <div class="dest-grid">
+        <div class="dest-grid-card" style="background:url('https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=600&h=500&fit=crop') center/cover"><span>Bangkok</span></div>
+        <div class="dest-grid-card" style="background:url('https://images.unsplash.com/photo-1504214208698-ea1916a2195a?w=600&h=500&fit=crop') center/cover"><span>Thailands øer og strande</span></div>
+        <div class="dest-grid-card" style="background:url('https://images.unsplash.com/photo-1592364395653-83e648b20cc2?w=600&h=500&fit=crop') center/cover"><span>Nordthailand</span></div>
+        <div class="dest-grid-card" style="background:url('https://images.unsplash.com/photo-1536599018102-9f803c140fc1?w=600&h=500&fit=crop') center/cover"><span>Thailands jungle</span></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- 5. POPULAR PILLS -->
+  <div class="container">
+    <div class="popular-pills">
+      <h3 class="font-heading">Populære rejsemål</h3>
+      <div class="pills-wrap">
+        <span class="pill-tag">Phuket</span>
+        <span class="pill-tag">Koh Lanta</span>
+        <span class="pill-tag">Krabi</span>
+        <span class="pill-tag">Koh Samui</span>
+        <span class="pill-tag">Koh Yao</span>
+        <span class="pill-tag">Khao Lak</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. EXPERT CARD — horizontal -->
+  <div class="expert-card">
+    <div class="container">
+      <div class="expert-card-inner">
+        <img class="expert-card-photo" src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&h=200&fit=crop&crop=face" alt="Alice Hamurkesen">
+        <div class="expert-card-content">
+          <div class="expert-card-name">Få hjælp til at skræddersy din Thailand-rejse</div>
+          <div class="expert-card-subtitle">Alice Hamurkesen — 12 års erfaring med Sydøstasien</div>
+          <div class="expert-card-buttons">
+            <button class="btn-primary">Ring til Alice: 77 33 55 00</button>
+            <button class="btn-outline">Skriv til Alice om Thailand</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. TRAVEL SUGGESTIONS — first 3 cards -->
+  <div class="container">
+    <section class="section">
+      <h2 class="font-heading">Rejseforslag til Thailand</h2>
+      <div class="travel-cards">
+        <div class="travel-card">
+          <img class="travel-card-img" src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&h=500&fit=crop" alt="Kultur, boutique-hoteller og strand">
+          <div class="travel-card-body">
+            <div class="travel-card-title">Kultur, boutique-hoteller og strand</div>
+            <div class="travel-card-meta">
+              <span>15 dage / 12 nætter</span>
+              <span class="travel-card-price">Fra 22.720 kr.</span>
+            </div>
+          </div>
+        </div>
+        <div class="travel-card">
+          <img class="travel-card-img" src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800&h=500&fit=crop" alt="På sporet af det autentiske Thailand">
+          <div class="travel-card-body">
+            <div class="travel-card-title">På sporet af det autentiske Thailand</div>
+            <div class="travel-card-meta">
+              <span>12 dage / 9 nætter</span>
+              <span class="travel-card-price">Fra 69.050 kr.</span>
+            </div>
+          </div>
+        </div>
+        <div class="travel-card">
+          <img class="travel-card-img" src="https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=800&h=500&fit=crop" alt="Nordthailand, Bangkok og strandferie i Khao Lak">
+          <div class="travel-card-body">
+            <div class="travel-card-title">Nordthailand, Bangkok og strandferie i Khao Lak</div>
+            <div class="travel-card-meta">
+              <span>15 dage / 12 nætter</span>
+              <span class="travel-card-price">Fra 25.450 kr.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- 8. COMPACT CTA — horizontal -->
+  <!-- compact CTA removed -->
+
+  <!-- 9. 3 MORE TRAVEL CARDS -->
+  <div class="container">
+    <section class="section">
+      <div class="travel-cards">
+        <div class="travel-card">
+          <img class="travel-card-img" src="https://images.unsplash.com/photo-1506665531195-3566af2b4dfa?w=800&h=500&fit=crop" alt="Bangkok, Uthai Thani og Phuket">
+          <div class="travel-card-body">
+            <div class="travel-card-title">Bangkok, Uthai Thani og Phuket</div>
+            <div class="travel-card-meta">
+              <span>15 dage / 12 nætter</span>
+              <span class="travel-card-price">Fra 21.530 kr.</span>
+            </div>
+          </div>
+        </div>
+        <div class="travel-card">
+          <img class="travel-card-img" src="https://images.unsplash.com/photo-1483683804023-6ccdb62f86ef?w=800&h=500&fit=crop" alt="Romantik for to i Krabi og på Koh Lanta">
+          <div class="travel-card-body">
+            <div class="travel-card-title">Romantik for to i Krabi og på Koh Lanta</div>
+            <div class="travel-card-meta">
+              <span>14 dage / 11 nætter</span>
+              <span class="travel-card-price">Fra 17.175 kr.</span>
+            </div>
+          </div>
+        </div>
+        <div class="travel-card">
+          <img class="travel-card-img" src="https://images.unsplash.com/photo-1540202404-a2f29016b523?w=800&h=500&fit=crop" alt="Bangkok, Chanthaburi og Koh Samet">
+          <div class="travel-card-body">
+            <div class="travel-card-title">Bangkok, Chanthaburi og Koh Samet</div>
+            <div class="travel-card-meta">
+              <span>15 dage / 12 nætter</span>
+              <span class="travel-card-price">Fra 26.320 kr.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- 10. INSPIRATION LINKS -->
+  <div class="container">
+    <div class="inspo-links">
+      <h3 class="font-heading">Lad dig inspirere</h3>
+      <a href="#" class="inspo-link-item">Thailands 7 ukendte øer</a>
+      <a href="#" class="inspo-link-item">På elefanternes præmisser</a>
+      <a href="#" class="inspo-link-item">Bangkok. Kaos. Neon. Skyline</a>
+    </div>
+  </div>
+
+  <!-- expert full section removed -->
+
+  <!-- 12. TEXT SECTION — "for alle" -->
+  <div class="container">
+    <div class="text-section">
+      <h3 class="font-heading">Thailand-rejser er for alle</h3>
+      <div class="text-section-cols">
+        <p>Thailand er et af de mest alsidige rejsemål i verden. For par tilbyder landet romantiske strandoplevelser, intime boutique-hoteller og middage under åben himmel med udsigt over havet. For familier er der eventyr i junglen, snorkling i varmt vand og tempelbesøg der gør indtryk på både store og små.</p>
+        <p>Rejser du alene, finder du hurtigt fællesskab og frihed i lige mål — fra yogaretreats til madmarkeder der summer af liv. Og for flergenerationsrejser er Thailand ideelt: tempoet kan tilpasses, afstandene er overkommelige, og der er noget for alle aldre. Vi hjælper dig med at sy det hele sammen.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 13. EXPERIENCE CARDS — 2 columns, alternating -->
+  <div class="container">
+    <div class="exp-cards-section">
+
+      <div class="exp-card">
+        <div class="exp-card-img-wrap">
+          <img class="exp-card-img" src="https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=800&h=600&fit=crop" alt="Thailand med børn">
+        </div>
+        <div class="exp-card-body">
+          <h4>Thailand med børn</h4>
+          <p>Bambusrafting ned ad en flod, cykelture mellem rismarker og besøg på etiske elefantcentre, hvor børnene kan komme helt tæt på. Thailand er et land der vækker nysgerrighed hos de yngste — og giver forældrene oplevelser de aldrig glemmer. Vi sammensætter rejser med det rette tempo og den rette blanding af eventyr og afslapning.</p>
+        </div>
+      </div>
+
+      <div class="exp-card">
+        <div class="exp-card-img-wrap">
+          <img class="exp-card-img" src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&h=600&fit=crop" alt="Smag på Thailand">
+        </div>
+        <div class="exp-card-body">
+          <h4>Smag på Thailand</h4>
+          <p>Pad thai fra en gadebod i Bangkok. Satay-spyd på et marked i Chiang Mai. Massaman curry i det sydlige Thailand. Det thailandske køkken er regionalt, mangfoldigt og altid friskt tilberedt. Vi planlægger rejser hvor maden er mere end næring — den er en del af oplevelsen. Fra street food-ture til madlavningskurser i lokale hjem.</p>
+        </div>
+      </div>
+
+      <div class="exp-card">
+        <div class="exp-card-img-wrap">
+          <img class="exp-card-img" src="https://images.unsplash.com/photo-1519046904884-53103b34b206?w=800&h=600&fit=crop" alt="Ferier uden børn">
+        </div>
+        <div class="exp-card-body">
+          <h4>Ferier uden børn</h4>
+          <p>Stilhed, sol og tid til hinanden. Thailands øer byder på alt fra afsidesliggende bungalows til luksusresorts med infinity-pools og spa. Vi finder det rette sted til jer — uanset om I søger eventyr eller blot en hængekøje i skyggen.</p>
+        </div>
+      </div>
+
+      <div class="exp-card">
+        <div class="exp-card-img-wrap">
+          <img class="exp-card-img" src="https://images.unsplash.com/photo-1549366021-9f761d450615?w=800&h=600&fit=crop" alt="Dyreliv i Thailand">
+        </div>
+        <div class="exp-card-body">
+          <h4>Dyreliv i Thailand</h4>
+          <p>Elephant Hills i Khao Sok er en unik oplevelse, hvor du bor i flydende telte midt i regnskoven og møder elefanter på deres præmisser. Thailand har også et rigt undervandsliv — fra farvande omkring Similan-øerne til korallerne ved Koh Tao. Vi sammensætter oplevelser der er ansvarlige og uforglemmelige.</p>
+        </div>
+      </div>
+
+      <div class="exp-card">
+        <div class="exp-card-img-wrap">
+          <img class="exp-card-img" src="https://images.unsplash.com/photo-1512553758700-7b40b5d5e745?w=800&h=600&fit=crop" alt="Kultur og historie">
+        </div>
+        <div class="exp-card-body">
+          <h4>Kultur og historie</h4>
+          <p>Fra det storslåede Grand Palace i Bangkok til de gamle Lanna-kongedømmes templer i nord. Thailands historie er levende og synlig overalt. Munke i orange gevandter, røgelse i templerne, og en kultur der blander respekt for fortiden med en moderne energi. Vi tager dig med til steder, hvor historien stadig mærkes.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 14. STRANDFERIE -->
+  <div class="container">
+    <section class="section">
+      <div class="strand-section">
+        <img class="strand-img" src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&h=600&fit=crop" alt="Strandferie i Thailand">
+        <div class="strand-text">
+          <h3>Strandferie i Thailand</h3>
+          <p>Med over tusind kilometer kystlinje og hundredvis af øer har Thailand strande til enhver smag. Fra de livlige strande på Phuket til de næsten uberørte perler i Trang-provinsen. Vi kender dem alle — og finder den strand, der passer til netop din drøm om en strandferie.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- 15. WEATHER WIDGET -->
+  <div class="weather">
+    <div class="container">
+      <h3>Thailand — hvornår er det bedst?</h3>
+      <div class="weather-best">Bedste tid: november–marts</div>
+      <div class="weather-stats">
+        <div>
+          <div class="weather-stat-label">Temperatur</div>
+          <div class="weather-stat-value">21–30°C</div>
+        </div>
+        <div>
+          <div class="weather-stat-label">Nedbør</div>
+          <div class="weather-stat-value">1–30 cm</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 16. ALT SKRÆDDERSYES -->
+  <div class="container">
+    <section class="section">
+      <div class="custom-section">
+        <img class="custom-img" src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=800&h=600&fit=crop" alt="Skræddersyet rejse">
+        <div class="custom-text">
+          <h3 class="font-heading">Alt skræddersyes</h3>
+          <p>Hos Profil Rejser er ingen to rejser ens. Vi lytter til dine ønsker, kender destinationerne i detaljen og sammensætter en rejse der passer præcis til dig. Fra valg af hotel og oplevelser til de små detaljer der gør forskellen. Ring til os, og lad os begynde at planlægge.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- 17. PRACTICAL LINK -->
+  <div class="container">
+    <div class="practical-link">
+      <a href="#">Rejsevejledning til Thailand</a>
+    </div>
+  </div>
+
+  <!-- 18. NEWSLETTER -->
+  <div class="container">
+    <div class="newsletter">
+      <h3 class="font-heading">Få inspiration i din indbakke</h3>
+      <p>Tilmeld dig vores nyhedsbrev og deltag i konkurrencen om et gavekort på 5.000 kr.</p>
+      <div class="newsletter-form">
+        <input class="newsletter-input" type="email" placeholder="Din e-mailadresse">
+        <button class="newsletter-btn">Tilmeld</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 19. GALLERY -->
+  <div class="gallery">
+    <img src="https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=600&h=400&fit=crop" alt="Thailand strand">
+    <img src="https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=600&h=400&fit=crop" alt="Bangkok tempel">
+    <img src="https://images.unsplash.com/photo-1504214208698-ea1916a2195a?w=600&h=400&fit=crop" alt="Longtail-båd">
+  </div>
+
+  <!-- 20. FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <strong>Rejseinspiration</strong>
+          Rejseartikler<br>Events<br>BEYOND-magasin<br>Kataloger<br>Sæsonrejser
+        </div>
+        <div class="footer-col">
+          <strong>Kontakt os</strong>
+          Kontakt<br>Find rejseekspert<br>Tilbud<br>Nyhedsbrev<br>Gavekort
+        </div>
+        <div class="footer-col">
+          <strong>Om Profil Rejser</strong>
+          Om os<br>Karriere<br>Bella Vista<br>Grønland-initiativ
+        </div>
+        <div class="footer-col">
+          <strong>Praktisk</strong>
+          Betaling<br>Betingelser<br>Forsikringer<br>Persondata<br>Reklamationer
+        </div>
+      </div>
+      <div class="footer-bottom">+45 77 33 55 00 · CVR 13883408 · Medlem af Rejsegarantifonden</div>
+    </div>
+  </footer>
+
+  <!-- 21. FLOATING CTA BUTTON -->
+  <button class="floating-cta" id="floatingCta">
+    <img class="floating-cta-avatar" src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100&h=100&fit=crop&crop=face" alt="Alice">
+    <span class="floating-cta-text">Tal med vores Thailand-ekspert</span>
+    <span class="floating-cta-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg></span>
+  </button>
+
+  <!-- 22. DESKTOP EXPERT PANEL -->
+  <div class="desk-panel" id="deskPanel">
+    <div class="desk-panel-header">
+      <button class="desk-panel-close" id="deskPanelClose">&times;</button>
+    </div>
+    <div class="desk-panel-body">
+      <img class="panel-avatar" src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=300&h=300&fit=crop&crop=face" alt="Alice Hamurkesen">
+      <div class="panel-name">Lad Alice skræddersy din Thailand-rejse</div>
+      <div class="panel-title-text">Alice Hamurkesen — 12 års erfaring med Sydøstasien</div>
+
+      <div class="panel-phone">
+        <div class="panel-phone-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></div>
+        <div><div class="panel-phone-number">77 33 55 00</div><div class="panel-phone-label">Ring til Alice</div></div>
+      </div>
+
+      <div class="panel-divider">Eller skriv til Alice</div>
+
+      <form class="panel-form" onsubmit="return false">
+        <input class="panel-input" type="text" placeholder="Dit navn">
+        <input class="panel-input" type="text" placeholder="Telefon eller e-mail">
+        <textarea class="panel-textarea" placeholder="Fortæl kort hvad du drømmer om"></textarea>
+        <button class="panel-send">Send til Alice</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const header = document.getElementById('header');
+    const floatingCta = document.getElementById('floatingCta');
+    const deskPanel = document.getElementById('deskPanel');
+    const deskPanelClose = document.getElementById('deskPanelClose');
+
+    // Header scroll effect
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Show floating CTA after 5 seconds
+    setTimeout(() => {
+      floatingCta.classList.add('visible');
+    }, 5000);
+
+    // Open panel on floating CTA click
+    floatingCta.addEventListener('click', () => {
+      deskPanel.classList.add('active');
+      floatingCta.classList.remove('visible');
+    });
+
+    // Close panel
+    deskPanelClose.addEventListener('click', () => {
+      deskPanel.classList.remove('active');
+      floatingCta.classList.add('visible');
+    });
+
+    // Close panel on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && deskPanel.classList.contains('active')) {
+        deskPanel.classList.remove('active');
+        floatingCta.classList.add('visible');
+      }
+    });
+  </script>
+</body>
+</html>
