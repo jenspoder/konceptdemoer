@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profil Rejser — AI-søgning (Desktop)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    /* ========================================
+       RESET & BASE
+       ======================================== */
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    html{font-size:16px;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+    body{font-family:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#000;background:#fff;overflow-x:hidden}
+    .font-heading{font-family:'Playfair Display','Georgia',serif;font-weight:300}
+    a{color:inherit;text-decoration:none}
+
+    :root{
+      --navy:#1A2C41;
+      --white:#FFFFFF;
+      --light-bg:#F3F1ED;
+      --black:#000000;
+      --gray-dark:#545454;
+      --gray-mid:#313131;
+      --gold:#9F8974;
+      --blue-accent:#67AEFF;
+    }
+
+    .container{max-width:1200px;margin:0 auto;padding-left:40px;padding-right:40px}
+
+    /* ========================================
+       HEADER
+       ======================================== */
+    .header{position:fixed;top:0;left:0;width:100%;z-index:100;background:transparent;transition:background .3s,box-shadow .3s}
+    .header.scrolled{background:var(--white);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+    .header-inner{max-width:1200px;margin:0 auto;padding:18px 40px;display:flex;align-items:center;justify-content:space-between}
+    .header-logo{font-weight:700;font-size:15px;color:var(--white);text-transform:uppercase;letter-spacing:.5px;transition:color .3s}
+    .header.scrolled .header-logo{color:var(--navy)}
+    .header-nav{display:flex;gap:32px;align-items:center}
+    .header-nav-link{font-size:14px;font-weight:500;color:var(--white);transition:color .3s;cursor:pointer}
+    .header.scrolled .header-nav-link{color:var(--navy)}
+    .header-cta{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--white);background:transparent;border:1px solid rgba(255,255,255,.5);border-radius:9999px;padding:8px 20px;cursor:pointer;transition:all .3s}
+    .header.scrolled .header-cta{color:var(--navy);border-color:var(--navy)}
+
+    /* ========================================
+       HERO
+       ======================================== */
+    .hero{position:relative;height:50vh;min-height:400px;overflow:hidden;display:flex;align-items:flex-end}
+    .hero-image{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(26,44,65,.15),rgba(26,44,65,.50)),url('https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=1600&h=900&fit=crop&crop=center') center/cover no-repeat}
+    .hero-content{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:0 40px 56px;width:100%}
+    .hero-content h1{font-size:52px;line-height:1.1;color:var(--white);margin-bottom:12px}
+    .hero-content p{font-size:18px;color:rgba(255,255,255,.85);line-height:1.5;max-width:500px}
+
+    /* ========================================
+       SEARCH SECTION
+       ======================================== */
+    .search-section{background:var(--light-bg);padding:48px 0}
+    .search-inner{max-width:1200px;margin:0 auto;padding:0 40px}
+    .search-section h2{font-size:28px;line-height:1.3;color:var(--navy);margin-bottom:24px}
+    .search-field{display:flex;gap:16px;max-width:600px}
+    .search-input{flex:1;font-family:'DM Sans',sans-serif;font-size:16px;padding:14px 18px;border:1px solid rgba(26,44,65,.2);border-radius:12px;background:var(--white);color:var(--black);outline:none;transition:border-color .2s}
+    .search-input::placeholder{color:#999}
+    .search-input:focus{border-color:var(--navy)}
+    .search-btn{font-family:'DM Sans',sans-serif;font-size:16px;font-weight:700;color:var(--white);background:var(--navy);border:2px solid var(--navy);border-radius:9999px;padding:14px 36px;cursor:pointer;transition:all .2s;flex-shrink:0}
+    .search-btn:hover{background:#243a54}
+
+    /* ========================================
+       INSPIRATION CARDS
+       ======================================== */
+    .content-below{padding:56px 0}
+    .content-below h2{font-size:28px;line-height:1.3;color:var(--navy);margin-bottom:24px}
+    .inspiration-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+    .inspiration-card{position:relative;height:280px;border-radius:12px;overflow:hidden;display:flex;align-items:flex-end;padding:24px;cursor:pointer;transition:transform .2s}
+    .inspiration-card:hover{transform:scale(1.02)}
+    .inspiration-card::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(26,44,65,.6) 0%,transparent 60%)}
+    .inspiration-card span{position:relative;z-index:1;font-family:'Playfair Display',serif;font-weight:300;font-size:22px;color:var(--white)}
+    .card-maldiverne{background:url('https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=800&h=500&fit=crop') center/cover}
+    .card-thailand{background:url('https://images.unsplash.com/photo-1528181304800-259b08848526?w=800&h=500&fit=crop') center/cover}
+    .card-gronland{background:url('https://images.unsplash.com/photo-1531168556467-80aace0d0144?w=800&h=500&fit=crop') center/cover}
+
+    /* ========================================
+       FOOTER
+       ======================================== */
+    .site-footer{background:var(--navy);color:rgba(255,255,255,.7);padding:56px 0;font-size:14px;line-height:1.8}
+    .footer-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:32px}
+    .footer-col strong{color:var(--white);font-weight:500;display:block;margin-bottom:10px}
+    .footer-bottom{margin-top:40px;padding-top:24px;border-top:1px solid rgba(255,255,255,.1);font-size:13px;color:rgba(255,255,255,.4)}
+
+    /* ========================================
+       SLIDE-OVER PANEL
+       ======================================== */
+    .slide-panel{
+      position:fixed;
+      top:0;
+      right:0;
+      width:66.666vw;
+      height:100vh;
+      background:var(--white);
+      z-index:500;
+      display:flex;
+      flex-direction:column;
+      transform:translateX(100%);
+      transition:transform .45s cubic-bezier(0.32,0.72,0,1);
+      box-shadow:-4px 0 40px rgba(0,0,0,.1);
+    }
+    .slide-panel.active{transform:translateX(0)}
+
+    .slide-panel-header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:24px 40px 20px;
+      flex-shrink:0;
+      border-bottom:1px solid rgba(0,0,0,.06);
+    }
+    .panel-query{font-size:14px;color:var(--gray-dark)}
+    .panel-close{
+      width:36px;height:36px;border-radius:50%;border:none;
+      background:var(--light-bg);color:var(--gray-mid);font-size:20px;
+      cursor:pointer;display:flex;align-items:center;justify-content:center;
+      flex-shrink:0;transition:background .2s;
+    }
+    .panel-close:hover{background:#e0ddd8}
+
+    .panel-body{
+      flex:1;overflow-y:auto;padding:24px 40px 24px;
+      -webkit-overflow-scrolling:touch;
+    }
+
+    .panel-footer{
+      flex-shrink:0;
+      padding:16px 40px;
+      padding-bottom:max(16px,env(safe-area-inset-bottom));
+      border-top:1px solid rgba(0,0,0,.06);
+      background:var(--white);
+    }
+    .followup-field{display:flex;gap:10px;align-items:center}
+    .followup-input{
+      flex:1;font-family:'DM Sans',sans-serif;font-size:15px;
+      padding:14px 18px;border:1px solid rgba(26,44,65,.15);
+      border-radius:12px;background:var(--light-bg);color:var(--black);outline:none;
+    }
+    .followup-input::placeholder{color:#999}
+    .followup-input:focus{border-color:var(--navy);background:var(--white)}
+    .followup-send{
+      width:46px;height:46px;border-radius:50%;border:none;
+      background:var(--navy);color:var(--white);cursor:pointer;
+      display:flex;align-items:center;justify-content:center;flex-shrink:0;
+      transition:background .2s;
+    }
+    .followup-send:hover{background:#243a54}
+    .followup-send svg{width:18px;height:18px}
+
+    /* ========================================
+       PANEL CONTENT
+       ======================================== */
+    .ai-text{font-size:15px;line-height:1.6;color:var(--gray-mid);margin-bottom:8px;padding-top:4px}
+    .ai-text.new-block{margin-top:28px;padding-top:28px;border-top:1px solid rgba(0,0,0,.06)}
+
+    .result-item{padding:16px 0;border-bottom:1px solid rgba(0,0,0,.06);cursor:pointer;transition:background .15s;display:flex;gap:16px;align-items:flex-start}
+    .result-item:hover{background:rgba(243,241,237,.5);margin:0 -12px;padding-left:12px;padding-right:12px;border-radius:8px}
+    .result-item:last-child{border-bottom:none}
+    .result-thumb{width:72px;height:72px;border-radius:8px;object-fit:cover;flex-shrink:0}
+    .result-text{flex:1;min-width:0}
+    .result-title{font-size:16px;font-weight:700;color:var(--navy);margin-bottom:4px;line-height:1.3}
+    .result-desc{font-size:14px;line-height:1.5;color:var(--gray-dark)}
+
+    .action-buttons{display:flex;gap:12px;justify-content:flex-start;flex-wrap:wrap;padding:24px 0}
+    .action-btn{
+      font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;
+      color:var(--navy);background:transparent;border:1.5px solid var(--navy);
+      border-radius:9999px;padding:10px 24px;cursor:pointer;transition:all .2s;
+    }
+    .action-btn:hover{background:var(--navy);color:var(--white)}
+
+    .expert-cta{
+      margin-top:28px;padding:24px;background:var(--light-bg);border-radius:12px;
+      display:flex;flex-direction:row;gap:20px;align-items:flex-start;
+    }
+    .expert-cta-content{flex:1;display:flex;flex-direction:column;gap:12px}
+    .expert-cta-photo{width:80px;height:80px;border-radius:50%;object-fit:cover;flex-shrink:0;align-self:center}
+    .expert-cta-title{font-family:'Playfair Display',serif;font-weight:300;font-size:20px;line-height:1.3;color:var(--navy)}
+    .expert-cta-desc{font-size:14px;line-height:1.5;color:var(--gray-dark)}
+    .expert-cta-actions{display:flex;gap:10px;align-items:center;margin-top:4px}
+    .expert-btn{
+      font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;
+      border-radius:9999px;padding:12px 22px;cursor:pointer;transition:all .2s;
+      border:none;text-decoration:none;text-align:center;
+    }
+    .expert-btn-primary{background:var(--navy);color:var(--white)}
+    .expert-btn-primary:hover{background:#243a54}
+    .expert-btn-icon{
+      width:44px;height:44px;border-radius:50%;border:none;background:var(--navy);
+      color:var(--white);cursor:pointer;display:flex;align-items:center;justify-content:center;
+      flex-shrink:0;transition:background .2s;
+    }
+    .expert-btn-icon:hover{background:#243a54}
+    .expert-btn-icon svg{width:18px;height:18px}
+
+    .ai-prose{font-size:15px;line-height:1.7;color:var(--gray-mid);margin-top:16px;margin-bottom:8px}
+
+    /* Typing indicator */
+    .typing-indicator{display:flex;gap:4px;padding:20px 0}
+    .typing-indicator span{width:6px;height:6px;border-radius:50%;background:var(--gray-dark);animation:typing 1.2s infinite}
+    .typing-indicator span:nth-child(2){animation-delay:.2s}
+    .typing-indicator span:nth-child(3){animation-delay:.4s}
+    @keyframes typing{
+      0%,60%,100%{opacity:.3;transform:translateY(0)}
+      30%{opacity:1;transform:translateY(-4px)}
+    }
+
+    /* Fade-in */
+    .fade-in{opacity:0;transform:translateY(8px);animation:fadeUp .4s ease forwards}
+    .fade-in-d1{animation-delay:.1s}
+    .fade-in-d2{animation-delay:.2s}
+    .fade-in-d3{animation-delay:.3s}
+    .fade-in-d4{animation-delay:.4s}
+    .fade-in-d5{animation-delay:.5s}
+    .fade-in-d6{animation-delay:.6s}
+    .fade-in-d7{animation-delay:.7s}
+    .fade-in-d8{animation-delay:.8s}
+    @keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+
+    /* Click-outside area */
+    .panel-backdrop{
+      position:fixed;inset:0;z-index:400;
+      display:none;
+    }
+    .panel-backdrop.active{display:block}
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header" id="header">
+    <div class="header-inner">
+      <a href="../index.html" class="header-logo">Profil Rejser</a>
+      <div class="header-nav">
+        <span class="header-nav-link">Find destination</span>
+        <span class="header-nav-link">Find krydstogt</span>
+        <span class="header-nav-link">Firmarejser</span>
+        <button class="header-cta">Få et tilbud</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-image"></div>
+    <div class="hero-content">
+      <h1 class="font-heading">Beyond ordinary travel</h1>
+      <p>Skræddersyede rejser til verdens mest fascinerende destinationer</p>
+    </div>
+  </section>
+
+  <!-- SEARCH -->
+  <section class="search-section">
+    <div class="search-inner">
+      <h2 class="font-heading">Fortæl os om din drømmerejse ...</h2>
+      <div class="search-field">
+        <input type="text" class="search-input" id="searchInput" placeholder="Nordlys, Mauritius eller Gourmet?" value="gourmet i Asien">
+        <button class="search-btn" id="searchBtn">SØG</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- INSPIRATION -->
+  <section class="content-below">
+    <div class="container">
+      <h2 class="font-heading">Find inspiration til din næste rejse</h2>
+      <div class="inspiration-grid">
+        <div class="inspiration-card card-maldiverne"><span>Maldiverne</span></div>
+        <div class="inspiration-card card-thailand"><span>Thailand</span></div>
+        <div class="inspiration-card card-gronland"><span>Grønland</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <strong>Rejseinspiration</strong>
+          Artikler<br>Events<br>BEYOND-magasin<br>Kataloger
+        </div>
+        <div class="footer-col">
+          <strong>Kontakt</strong>
+          +45 77 33 55 00<br>info@profil-rejser.dk
+        </div>
+        <div class="footer-col">
+          <strong>Om Profil Rejser</strong>
+          Beyond ordinary travel siden 1987
+        </div>
+        <div class="footer-col">
+          <strong>Praktisk</strong>
+          Rejsebetingelser<br>Privatlivspolitik<br>Cookiepolitik
+        </div>
+      </div>
+      <div class="footer-bottom">CVR 13883408 &middot; Medlem af Rejsegarantifonden</div>
+    </div>
+  </footer>
+
+  <!-- BACKDROP (click-outside to close) -->
+  <div class="panel-backdrop" id="panelBackdrop"></div>
+
+  <!-- SLIDE-OVER PANEL -->
+  <div class="slide-panel" id="slidePanel">
+    <div class="slide-panel-header">
+      <span class="panel-query" id="panelQuery"></span>
+      <button class="panel-close" id="panelClose">&times;</button>
+    </div>
+    <div class="panel-body" id="panelBody"></div>
+    <div class="panel-footer">
+      <div class="followup-field">
+        <input type="text" class="followup-input" id="followupInput" placeholder="Stil et opfølgende spørgsmål ...">
+        <button class="followup-send" id="followupSend">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ==========================================
+    // DATA (identical to mobile demo)
+    // ==========================================
+    const data = {
+      initial: {
+        intro: 'Her er fem oplevelser der matcher din interesse for gourmet i Asien:',
+        results: [
+          { title: 'Kulinarisk rejse gennem Thailand', desc: 'Oplev autentisk thai-køkken fra Bangkoks gadekøkkener til Chiang Mais kokkeskoler.', img: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=200&h=200&fit=crop' },
+          { title: 'Vietnam — fra pho til fine dining', desc: 'En rejse gennem Vietnams madkultur, fra street food i Hanoi til Hoi Ans fusionsrestauranter.', img: 'https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=200&h=200&fit=crop' },
+          { title: 'Japans gastronomiske skatkammer', desc: 'Sushi i Tokyo, ramen i Osaka og sake-smagning i Kyoto.', img: 'https://images.unsplash.com/photo-1553621042-f6e147245754?w=200&h=200&fit=crop' },
+          { title: 'Bali — smag på Indonesien', desc: 'Fra rismarker til raffineret køkken — Balis madscene er en rejse i sig selv.', img: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=200&h=200&fit=crop' },
+          { title: 'Sri Lanka — krydderier og curries', desc: 'Oplev øens unikke smagspalet med kokoskurser, teproduktion og lokale markeder.', img: 'https://images.unsplash.com/photo-1596797038530-2c107229654b?w=200&h=200&fit=crop' }
+        ],
+        extra: [
+          { title: 'Korea — fermentering og BBQ', desc: 'Kimchi, Korean BBQ og Seouls pulserende madmarkeder venter på dig.', img: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?w=200&h=200&fit=crop' }
+        ]
+      },
+      tellMore: {
+        prose: 'Asien er et kontinent hvor maden ikke bare er næring — den er kultur, fællesskab og identitet. Fra Thailands aromatiske gadesælgere, hvor wok-pander buldrer over åben ild, til Japans zen-lignende tilgang til sushi, hvor hver detalje er gennemtænkt ned til den mindste skive ingefær.\n\nVores kulinariske rejser er sammensat i samarbejde med lokale kokke, madskribenter og restauratører, så du ikke bare smager maden — du forstår den. Vi tager dig med bag kulisserne: til morgenmarkederne før solen står op, til familiekøkkenerne hvor opskrifterne går i arv, og til restauranterne hvor tradition møder fornyelse.\n\nHvis du drømmer om en rejse hvor smagen sætter kursen, så er Asien det perfekte udgangspunkt.'
+      },
+      streetFood: {
+        intro: 'Her er street food-oplevelser i Asien:',
+        results: [
+          { title: 'Street food-guide til Bangkok', desc: 'De bedste markeder, gadekøkkener og lokale favoritter i Thailands hovedstad.', img: 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=200&h=200&fit=crop' },
+          { title: 'Hanois 10 bedste street food-oplevelser', desc: 'Fra bun cha til egg coffee — en guide til Vietnams gastronomiske hjerte.', img: 'https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=200&h=200&fit=crop' },
+          { title: 'Night markets i Taipei', desc: 'Taiwans berømte natmarkeder byder på alt fra stinky tofu til bubble tea.', img: 'https://images.unsplash.com/photo-1508424757105-b6d5ad9329d0?w=200&h=200&fit=crop' },
+          { title: 'Penang — Malaysias street food-hovedstad', desc: 'Char kway teow, laksa og roti canai — Penang er et paradis for gadeentusiaster.', img: 'https://images.unsplash.com/photo-1567337710282-00832b415979?w=200&h=200&fit=crop' },
+          { title: 'Osaka — Japans køkken-hovedstad', desc: 'Takoyaki, okonomiyaki og dotonbori-kvarterets endeløse madboder.', img: 'https://images.unsplash.com/photo-1551218808-94e220e084d2?w=200&h=200&fit=crop' }
+        ],
+        extra: [
+          { title: 'Singapur — hawker centres i verdensklasse', desc: 'UNESCO-anerkendte madstande med Michelin-stjerner til under 30 kroner.', img: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=200&h=200&fit=crop' }
+        ]
+      }
+    };
+
+    // ==========================================
+    // ELEMENTS
+    // ==========================================
+    const header = document.getElementById('header');
+    const searchBtn = document.getElementById('searchBtn');
+    const searchInput = document.getElementById('searchInput');
+    const slidePanel = document.getElementById('slidePanel');
+    const panelBackdrop = document.getElementById('panelBackdrop');
+    const panelClose = document.getElementById('panelClose');
+    const panelBody = document.getElementById('panelBody');
+    const panelQuery = document.getElementById('panelQuery');
+    const followupInput = document.getElementById('followupInput');
+    const followupSend = document.getElementById('followupSend');
+
+    // ==========================================
+    // HEADER SCROLL
+    // ==========================================
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // ==========================================
+    // HELPERS
+    // ==========================================
+    function typingHTML() {
+      return '<div class="typing-indicator"><span></span><span></span><span></span></div>';
+    }
+
+    function resultsHTML(results, delayStart = 1) {
+      return results.map((r, i) => `
+        <div class="result-item fade-in fade-in-d${delayStart + i}">
+          <img class="result-thumb" src="${r.img}" alt="">
+          <div class="result-text">
+            <div class="result-title">${r.title}</div>
+            <div class="result-desc">${r.desc}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function expertCTAHTML() {
+      return `
+        <div class="expert-cta fade-in fade-in-d6">
+          <div class="expert-cta-content">
+            <div class="expert-cta-title font-heading">Tal med vores Asien-ekspert</div>
+            <div class="expert-cta-desc">Alice kender Asiens kulinariske scene indgående og kan skræddersy den perfekte rejse til dig.</div>
+            <div class="expert-cta-actions">
+              <button class="expert-btn expert-btn-primary">Ring til Alice</button>
+              <button class="expert-btn-icon" title="Send en besked">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <img class="expert-cta-photo" src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&h=200&fit=crop&crop=face" alt="Alice">
+        </div>
+      `;
+    }
+
+    function scrollToNewContent(element) {
+      setTimeout(() => {
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
+    }
+
+    // ==========================================
+    // OPEN / CLOSE PANEL
+    // ==========================================
+    function openPanel() {
+      const query = searchInput.value.trim();
+      if (!query) return;
+
+      panelQuery.textContent = 'Søgning: "' + query + '"';
+      slidePanel.classList.add('active');
+      panelBackdrop.classList.add('active');
+
+      panelBody.innerHTML = typingHTML();
+
+      setTimeout(() => {
+        const d = data.initial;
+        let html = '<p class="ai-text fade-in fade-in-d1">' + d.intro + '</p>';
+        html += resultsHTML(d.results, 2);
+        html += `
+          <div class="action-buttons fade-in fade-in-d7">
+            <button class="action-btn" id="btnSeeMore">Se flere</button>
+            <button class="action-btn" id="btnTellMore">Fortæl mig mere</button>
+          </div>
+        `;
+        panelBody.innerHTML = html;
+        attachInitialHandlers();
+      }, 1200);
+    }
+
+    function closePanel() {
+      slidePanel.classList.remove('active');
+      panelBackdrop.classList.remove('active');
+      followupInput.value = '';
+    }
+
+    function attachInitialHandlers() {
+      document.getElementById('btnSeeMore')?.addEventListener('click', handleSeeMore);
+      document.getElementById('btnTellMore')?.addEventListener('click', handleTellMore);
+    }
+
+    // ==========================================
+    // "SE FLERE"
+    // ==========================================
+    function handleSeeMore() {
+      const btnRow = document.querySelector('.action-buttons');
+      if (btnRow) btnRow.remove();
+
+      const fragment = document.createElement('div');
+      fragment.innerHTML = resultsHTML(data.initial.extra, 1) + expertCTAHTML();
+      panelBody.appendChild(fragment);
+      scrollToNewContent(fragment);
+    }
+
+    // ==========================================
+    // "FORTÆL MIG MERE"
+    // ==========================================
+    function handleTellMore() {
+      const btnRow = document.querySelector('.action-buttons');
+      if (btnRow) btnRow.remove();
+
+      const typingEl = document.createElement('div');
+      typingEl.innerHTML = typingHTML();
+      panelBody.appendChild(typingEl);
+      scrollToNewContent(typingEl);
+
+      setTimeout(() => {
+        typingEl.remove();
+        const paragraphs = data.tellMore.prose.split('\n\n');
+        let proseHTML = '';
+        paragraphs.forEach((p, i) => {
+          proseHTML += '<p class="ai-prose fade-in fade-in-d' + (i + 1) + '">' + p + '</p>';
+        });
+        proseHTML += expertCTAHTML();
+
+        const fragment = document.createElement('div');
+        fragment.innerHTML = proseHTML;
+        panelBody.appendChild(fragment);
+        scrollToNewContent(fragment);
+      }, 1500);
+    }
+
+    // ==========================================
+    // FOLLOW-UP
+    // ==========================================
+    function sendFollowup() {
+      const query = followupInput.value.trim();
+      if (!query) return;
+
+      followupInput.value = '';
+      panelQuery.textContent = 'Søgning: "' + query + '"';
+
+      document.querySelectorAll('.action-buttons').forEach(el => el.remove());
+
+      const typingEl = document.createElement('div');
+      typingEl.innerHTML = '<div class="ai-text new-block">' + typingHTML() + '</div>';
+      panelBody.appendChild(typingEl);
+      scrollToNewContent(typingEl);
+
+      setTimeout(() => {
+        typingEl.remove();
+
+        const d = data.streetFood;
+        let html = '<p class="ai-text new-block fade-in fade-in-d1">' + d.intro + '</p>';
+        html += resultsHTML(d.results, 2);
+        html += `
+          <div class="action-buttons fade-in fade-in-d7">
+            <button class="action-btn" id="btnSeeMoreFollowup">Se flere</button>
+          </div>
+        `;
+        html += expertCTAHTML();
+
+        const fragment = document.createElement('div');
+        fragment.innerHTML = html;
+        panelBody.appendChild(fragment);
+        scrollToNewContent(fragment);
+
+        document.getElementById('btnSeeMoreFollowup')?.addEventListener('click', handleSeeMoreFollowup);
+      }, 1200);
+    }
+
+    function handleSeeMoreFollowup() {
+      const btnRow = document.getElementById('btnSeeMoreFollowup')?.closest('.action-buttons');
+      if (btnRow) btnRow.remove();
+
+      const expertEl = panelBody.querySelector('.expert-cta:last-of-type');
+      const fragment = document.createElement('div');
+      fragment.innerHTML = resultsHTML(data.streetFood.extra, 1);
+
+      if (expertEl) {
+        expertEl.parentNode.insertBefore(fragment, expertEl);
+      } else {
+        panelBody.appendChild(fragment);
+      }
+      scrollToNewContent(fragment);
+    }
+
+    // ==========================================
+    // EVENT LISTENERS
+    // ==========================================
+    searchBtn.addEventListener('click', openPanel);
+    searchInput.addEventListener('keydown', e => { if (e.key === 'Enter') openPanel(); });
+    panelClose.addEventListener('click', closePanel);
+    panelBackdrop.addEventListener('click', closePanel);
+    followupSend.addEventListener('click', sendFollowup);
+    followupInput.addEventListener('keydown', e => { if (e.key === 'Enter') sendFollowup(); });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && slidePanel.classList.contains('active')) closePanel();
+    });
+  </script>
+</body>
+</html>
