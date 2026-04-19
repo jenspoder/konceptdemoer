@@ -1067,8 +1067,12 @@
     // OPEN PANEL — first search
     // ==========================================
     function openPanel() {
-      const query = searchInput.value.trim();
-      if (!query) return;
+      let query = searchInput.value.trim();
+      if (!query) {
+        query = 'gourmet i Asien';
+        searchInput.value = query;
+        updatePlaceholderVisibility();
+      }
 
       interactionCount = 0;
       panelQuery.textContent = `Søgning: "${query}"`;
